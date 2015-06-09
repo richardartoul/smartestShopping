@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Smart Shopping List #
  
 ## Never forget an item again. ##
@@ -18,3 +19,6 @@
 
 ## Solution ##
   > It removes the burden of creating a new list every week before you head to the grocery store and keeps your trip quick and efficient. 
+=======
+# smartestShopping
+>>>>>>> 16c705c726e671f6665f6908ae919697a3614f97
