@@ -33,13 +33,11 @@ var App = Eventful.createClass({
 
   filterList: function(filter) {
     var filteredList = this.state.items;
-    this.setState({items: filteredList.filter(function(item) {
-      console.log("item is:", item.name);
-      console.log("filter is:", filter);
-      console.log("search was")
-      return item.name.toLowerCase().search(filter) !==-1;
-    })});
-    // this.setState({items: filteredList});
+    this.setState({
+      items: filteredList.filter(function(item) {
+        return item.name.toLowerCase().search(filter) !==-1;
+      })
+    });
   },
 
   addItem: function(item) {
