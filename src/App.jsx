@@ -17,6 +17,7 @@ var App = Eventful.createClass({
   getInitialState: function() {
     return {
       items: [],
+      filteredItems: [],
       mode: ModeToggle.EDITING
     };
   },
@@ -24,7 +25,8 @@ var App = Eventful.createClass({
   getList: function() {
     $.get(url.list)
     .done(function(data) {
-      this.setState({ items: data });
+      this.setState({items: data});
+      this.setState({filteredItems: data});
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error getting item list:', status, err);
@@ -34,7 +36,7 @@ var App = Eventful.createClass({
   filterList: function(filter) {
     var filteredList = this.state.items;
     this.setState({
-      items: filteredList.filter(function(item) {
+      filteredItems: filteredList.filter(function(item) {
         return item.name.toLowerCase().search(filter) !==-1;
       })
     });
