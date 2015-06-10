@@ -13,7 +13,9 @@ var AisleMap = function(options) {
 	this.aislesWithItems = [];
 	this.currentAisle = 0;
 	this.currentPosition = 0;
+	this.nextAisle = 0;
 	this.nextItem = 0;
+	this.direction = 1;
 	//array initializer makes array one size smaller than parameter
 	this.aisleLength = options.aisleLength + 1 || 11;
 	this.numAisles = options.numAisles || 5;
@@ -75,11 +77,58 @@ AisleMap.prototype.moveToItem = function(direction) {
 		}
 	}
 	console.log("moved to", this.currentAisle, this.currentPosition);
-
 }
 
-AisleMap.prototype.chooseDirection = function() {
+// AisleMap.prototype.
 
+AisleMap.prototype.chooseNextAisle = function() {
+	for (var i = this.currentAisle+1; i < this.aislesWithItems.length; i++) {
+		if (this.aislesWithItems[i]) {
+			this.nextAisle = i;
+			return i;
+		}
+	}
+}
+
+AisleMap.prototype.chooseDirection = function(direction) {
+	//correponds to direction, 1 is top half of aisle, -1 is bottom half of aisle
+	var side;
+	var hasItem = false;
+	//figure out what side the current position is on
+	if (this.currentPosition < this.aisleLength/2) {
+		side = -1;
+	}
+	else if (this.currentPosition > this.aisleLength/2) {
+		side = -1;
+	}
+	else {
+		side = direction;
+	}
+
+	console.log("current position is:", this.currentPosition);
+	console.log("side is:", side);
+	//check if there are any items on that side
+	if (side === 1) {
+		for (var i = this.aisleLength-1; i > 0; i--) {
+			if (this.grid[this.nextAisle][i]) {
+				hasItem = true;
+				break;
+			}
+		}
+	}
+	else if (side === -1) {
+		for (var i = 0; i < this.aisleLength; i++) {
+			if (this.grid[this.nextAisle][i]) {
+				hasItem = true;
+				break;
+			}
+		}
+	}
+	console.log("hasItem is:", hasItem);
+	//if there is an item on the same side, head in that direction, otherwise continue in same direction
+	if (hasItem) {
+		this.direction = side;
+	}
 }
 
 AisleMap.prototype.createPath = function() {
@@ -92,7 +141,10 @@ AisleMap.prototype.createPath = function() {
 	//if no more items in aisle, add current location to path
 	this.path.push({x: this.currentAisle, y:this.currentPosition});
 	//determine new direction
-
+	this.chooseNextAisle();
+	console.log("next aisle:", this.nextAisle);
+	this.chooseDirection();
+	console.log("new direction:", this.direction);
 	console.log(this.path);
 	//start at 0,0
 }
