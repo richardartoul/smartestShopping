@@ -31,6 +31,17 @@ var App = Eventful.createClass({
     });
   },
 
+  filterList: function(filter) {
+    var filteredList = this.state.items;
+    this.setState({items: filteredList.filter(function(item) {
+      console.log("item is:", item.name);
+      console.log("filter is:", filter);
+      console.log("search was")
+      return item.name.toLowerCase().search(filter) !==-1;
+    })});
+    // this.setState({items: filteredList});
+  },
+
   addItem: function(item) {
     $.post(url.addItem, item)
     .done(function(data) {
@@ -124,6 +135,9 @@ var App = Eventful.createClass({
     });
     this.on('change-mode', function(data) {
       this.changeMode(data);
+    });
+    this.on('filter-list', function(data) {
+      this.filterList(data);
     });
 
     this.getList();
