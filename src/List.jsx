@@ -15,6 +15,10 @@ var List = Eventful.createClass({
       <ListItem key={id} index={id} name={itemData.name} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
     );
   },
+  filterList: function(event) {
+    event.preventDefault();
+    this.emit('filter-list', event.target.value.toLowerCase());
+  },
   render: function() {
     return (
       <div className="row">
@@ -29,7 +33,7 @@ var List = Eventful.createClass({
                 <div className="list">
                   <div className='new-item-input'>
                     <form name="new-item-form" onSubmit={this.addItem}>
-                      <input className='new-item-input' type="text" ref="newItemInput" name="newItemInput" placeholder="Enter an item"/>
+                      <input className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
                     </form>
                 </div>
