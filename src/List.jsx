@@ -38,7 +38,7 @@ var List = Eventful.createClass({
                     </form>
                 </div>
                 <ul>
-                  {this.props.items.map(this.renderListItem)}
+                  {this.props.filteredItems.map(this.renderListItem)}
                 </ul>
                 </div>
               </div>
