@@ -10,14 +10,17 @@ var AisleMap = function(options) {
 	];
 	this.grid = [];
 	this.path = [];
+	this.aislesWithItems = [];
 	this.currentAisle = 0;
 	this.currentPosition = 0;
+	this.nextItem = 0;
 	//array initializer makes array one size smaller than parameter
 	this.aisleLength = options.aisleLength + 1 || 11;
+	this.numAisles = options.numAisles || 5;
 }
 
-AisleMap.prototype.constructGrid = function(numAisles) {
-	for (var i = 0; i < numAisles; i++) {
+AisleMap.prototype.constructGrid = function() {
+	for (var i = 0; i < this.numAisles; i++) {
 		//fun way to initialize array values
 		this.grid.push(new Array(this.aisleLength)
 			.join('0').split('').map(function(e) {return parseInt(e, 10);})
@@ -29,6 +32,19 @@ AisleMap.prototype.placeItems = function() {
 	for (var i = 0; i < this.items.length; i++) {
 		this.grid[this.items[i].x][this.items[i].y] = 1;
 	}
+}
+
+AisleMap.prototype.findAislesWithItems = function() {
+	var aislesWithItems = new Array(this.numAisles)
+		.join('0').split('').map(function(e) {return parseInt(e, 10);});
+
+	for (var i = 0; i < this.items.length; i++) {
+		if (!aislesWithItems[this.items[i].x]) {
+			aislesWithItems[this.items[i].x] = 1;
+		}
+	}
+
+	this.aislesWithItems = aislesWithItems;
 }
 
 //checks if the aisle has more items
@@ -62,21 +78,20 @@ AisleMap.prototype.moveToItem = function(direction) {
 
 }
 
+AisleMap.prototype.chooseDirection = function() {
+
+}
+
 AisleMap.prototype.createPath = function() {
 	var path = [];
 
-	//moves down the item
+	//moves down the aisle until there are no more items
 	while(this.checkAisle(1)) {
 		this.moveToItem(1);
 	}
 	//if no more items in aisle, add current location to path
 	this.path.push({x: this.currentAisle, y:this.currentPosition});
-
-	// this.checkAisle(1);
-	// this.moveToItem(1);
-	// this.checkAisle(1);
-	// this.moveToItem(1);
-
+	//determine new direction
 
 	console.log(this.path);
 	//start at 0,0
@@ -87,5 +102,7 @@ AisleMap.prototype.createPath = function() {
 var testMap = new AisleMap();
 testMap.constructGrid(5);
 testMap.placeItems();
+testMap.findAislesWithItems();
+console.log("Aisles with items:", testMap.aislesWithItems);
 testMap.createPath();
 console.log(testMap.grid);
