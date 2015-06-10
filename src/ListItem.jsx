@@ -63,6 +63,7 @@ var ListItem = Eventful.createClass({
           <i className ={cssClasses.editingIcon} onClick={this.removeItem}></i>
           <div className="item-label" onClick={this.switchToEditable}>{this.props.name}</div>
           <div className="food-cat">{this.props.foodCategory}</div>
+          <div className="food-price">${this.props.price}</div>
         </div>
         <div className={cssClasses.editableItem}>
           <form name={"item-form-" + this.props.index} onSubmit={this.updateItem}>

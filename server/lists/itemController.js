@@ -27,6 +27,7 @@ module.exports = {
     var newItem = new Item({
       name: name,
       data: {
+        price: '30',
         frequency: req.body.frequency,
         coupons: ['none'],
         expiration: new Date(2015,8,16)
