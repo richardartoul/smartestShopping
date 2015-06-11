@@ -48,7 +48,6 @@ var App = Eventful.createClass({
 
   addPrices: function(archive) {
     var args = Array.prototype.slice.apply(arguments);
-    console.log('args', args);
     var allItems = this.state.items;
     var sum = allItems.map(function(item) {
                 return item.data.price;
@@ -57,13 +56,11 @@ var App = Eventful.createClass({
       totalCost: sum.reduce(function(total, num){
         return total + num
       }, 0)
-    })
-    //if edit mode
-    console.log('totalCost', this.state.totalCost);
-
-    // if (!args){
+    }) 
+    //if the item is not being archived (args are only sent from archiveItem)
+    if (!args[0]){
       this.setRemainingBudget();
-    // } 
+    } 
   },
 
   setRemainingBudget: function() {
@@ -112,7 +109,7 @@ var App = Eventful.createClass({
   },
 
   archiveItem: function(item) {
-    var archive;
+    var archive = true;
     $.post(url.archiveItem, item)
     .done(function(data) {
       this.getList(archive);
