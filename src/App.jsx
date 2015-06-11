@@ -9,10 +9,6 @@ var ModeToggle = require('./ModeToggle');
 var auth = require('./auth');
 var url = require('./url');
 
-var Autocomplete = require('../lib/main');
-var Combobox = Autocomplete.Combobox;
-var ComboboxOption = Autocomplete.Option;
-
 var App = Eventful.createClass({
   contextTypes: {
     router: React.PropTypes.func
@@ -25,7 +21,8 @@ var App = Eventful.createClass({
       totalCost: 0,
       budget: 100,
       remainingBudget: 100,
-      predictedFoods: predictedFoods,
+      predictedFoods: 'predictedFoods',
+      selectedFood: 'selectedFood',
       mode: ModeToggle.EDITING
     };
   },

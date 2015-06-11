@@ -20,5 +20,11 @@ module.exports = {
     balance: Number,
     list: [{ type: Schema.Types.ObjectId, ref: 'Item'}],
     past_items: [{ type: Schema.Types.ObjectId, ref: 'Item'}]
+  }),
+
+  product: new Schema({
+    name: String,
+    cost: String,
+    category: String
   })
 };

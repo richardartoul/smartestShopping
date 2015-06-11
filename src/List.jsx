@@ -1,6 +1,9 @@
 var React = require('react');
 var Eventful = require('eventful-react');
 var ListItem = require('./ListItem');
+var Autocomplete = require('../lib/main');
+var Combobox = Autocomplete.Combobox;
+var ComboboxOption = Autocomplete.Option;
 
 var List = Eventful.createClass({
   addItem: function(e) {
@@ -33,13 +36,19 @@ var List = Eventful.createClass({
                 <div className="list">
                   <div className='new-item-input'>
                     <form name="new-item-form" onSubmit={this.addItem}>
-                      <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
+                      // <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
+                      <Combobox
+                        // onInput={this.handleInput}
+                        // onSelect={this.handleStateSelect}
+                        // value={this.state.selectedStateId}
+                      >
+                      </Combobox>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
                     </form>
                 </div>
                 <div className="budgetDisplay">
                   <h2 className="setBudget">Budget: ${this.props.budget}</h2>
-                  <h2 className="remainingBudget">Remaining: ${this.props.remainingBudget}</h2>
+                  <h2 className="remainingBudget">Balance: ${this.props.remainingBudget}</h2>
                 </div>
                 <ul>
                   {this.props.filteredItems.map(this.renderListItem)}
