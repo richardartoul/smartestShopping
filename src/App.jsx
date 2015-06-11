@@ -8,6 +8,7 @@ var Link = Router.Link;
 var ModeToggle = require('./ModeToggle');
 var auth = require('./auth');
 var url = require('./url');
+var config = require('./config')
 
 var App = Eventful.createClass({
   contextTypes: {
@@ -31,10 +32,31 @@ var App = Eventful.createClass({
       this.setState({items: data});
       this.setState({filteredItems: data});
       this.addPrices(archive);
+      console.log("items in state:", data);
+      for (var i = 0; i < data.length; i++) {
+        this.getAisle(data[i].name, i);
+      }
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error getting item list:', status, err);
     });
+  },
+
+  getAisle: function(itemName, index) {
+    var aisle;
+    $.ajax({
+      url: url.aisle,
+      data: {name: itemName},
+      type: 'GET'
+    }).done(function(data) {
+      //the api returns the response in an intersting way and need to be parsed
+      aisle = parseInt(data[0].AisleNumber[0].substring(6));
+      if (aisle) {
+        var items = this.state.items;
+        items[index].aisle = aisle;
+        this.setState({items: items});
+      }
+    }.bind(this))
   },
 
   filterList: function(filter) {
