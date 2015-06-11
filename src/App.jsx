@@ -25,12 +25,12 @@ var App = Eventful.createClass({
     };
   },
 
-  getList: function() {
+  getList: function(archive) {
     $.get(url.list)
     .done(function(data) {
       this.setState({items: data});
       this.setState({filteredItems: data});
-      this.addPrices();
+      this.addPrices(archive);
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error getting item list:', status, err);
@@ -46,7 +46,9 @@ var App = Eventful.createClass({
     });
   },
 
-  addPrices: function() {
+  addPrices: function(archive) {
+    var args = Array.prototype.slice.apply(arguments);
+    console.log('args', args);
     var allItems = this.state.items;
     var sum = allItems.map(function(item) {
                 return item.data.price;
@@ -56,25 +58,27 @@ var App = Eventful.createClass({
         return total + num
       }, 0)
     })
-    this.setRemainingBudget();
+    //if edit mode
+    console.log('totalCost', this.state.totalCost);
+
+    // if (!args){
+      this.setRemainingBudget();
+    // } 
   },
 
   setRemainingBudget: function() {
-    // if (this.state.budget > this.state.totalCost) {
-      // console.log('remainingBudget is > 0');
-      console.log(this.state.totalCost, ": total cost");
-      console.log(this.state.remainingBudget, ": remaining budget");
-      this.setState({
-        remainingBudget: this.state.budget - this.state.totalCost
-      })
-    // } 
+      // if (this.state.budget - this.state.totalCost > 0){
+        this.setState({
+          remainingBudget: this.state.budget - this.state.totalCost
+        })
+      // }
   },
 
   addItem: function(item) {
     $.post(url.addItem, item)
     .done(function(data) {
       this.getList();
-      this.addPrices();
+      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error adding new item to list:', status, err);
@@ -85,7 +89,7 @@ var App = Eventful.createClass({
     $.post(url.updateItem, item)
     .done(function(data) {
       this.getList();
-      this.addPrices();
+      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error updating item in list:', status, err);
@@ -100,7 +104,7 @@ var App = Eventful.createClass({
     })
     .done(function(data) {
       this.getList();
-      this.addPrices();
+      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error deleting item from list:', status, err);
@@ -108,9 +112,10 @@ var App = Eventful.createClass({
   },
 
   archiveItem: function(item) {
+    var archive;
     $.post(url.archiveItem, item)
     .done(function(data) {
-      this.getList();
+      this.getList(archive);
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error archiving item in list:', status, err);
@@ -155,7 +160,17 @@ var App = Eventful.createClass({
       this.updateItem(data)
     });
     this.on('add-item', function(data) {
-      this.addItem(data);
+      // if this.state.remainingBudget - thisItem.price > 0
+      if(this.state.remainingBudget - 30 >= 0){
+        this.addItem(data);
+      } else {
+        var exceedBudgetOk = confirm('This item will exceed your budget, are you sure you want to add it?');
+        if(exceedBudgetOk){
+          this.addItem(data);
+        } else {
+          this.getList();
+        }
+      }
     });
     this.on('remove-item', function(data) {
       if (this.state.mode === ModeToggle.SHOPPING) {
