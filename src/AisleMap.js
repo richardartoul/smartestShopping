@@ -6,7 +6,7 @@ var AisleMap = function(options) {
 		{x: 0, y:3},
 		{x: 1, y:1},
 		{x: 2, y:4},
-		{x: 4, y:0},
+		{x: 4, y:7},
 	];
 	this.grid = [];
 	this.path = [];
@@ -15,16 +15,16 @@ var AisleMap = function(options) {
 	this.currentPosition = 0;
 	this.nextAisle = 0;
 	this.nextItem = 0;
-	this.direction = 1;
-	//array initializer makes array one size smaller than parameter
-	this.aisleLength = options.aisleLength + 1 || 11;
+	this.direction;
+	this.aisleLength = options.aisleLength || 10;
 	this.numAisles = options.numAisles || 5;
 }
 
 AisleMap.prototype.constructGrid = function() {
 	for (var i = 0; i < this.numAisles; i++) {
+	//array initializer makes array one size smaller than parameter
+		this.grid.push(new Array(this.aisleLength+1)
 		//fun way to initialize array values
-		this.grid.push(new Array(this.aisleLength)
 			.join('0').split('').map(function(e) {return parseInt(e, 10);})
 		);
 	}
@@ -51,6 +51,7 @@ AisleMap.prototype.findAislesWithItems = function() {
 
 //checks if the aisle has more items
 AisleMap.prototype.checkAisle = function(direction) {
+	console.log("in check aisle, current position is:", this.currentPosition)
 	var currentAisle = this.currentAisle;
 	var currentPosition = this.currentPosition;
 	while (currentPosition < this.aisleLength && currentPosition >= 0) {
@@ -81,17 +82,24 @@ AisleMap.prototype.moveToItem = function(direction) {
 
 //path to end of aisle
 AisleMap.prototype.moveToEnd = function(direction) {
+	//if last aisle, head back to entrance
+	if (this.currentAisle === this.nextAisle) {
+		direction = -1;
+	}
 	if (direction === 1) {
+		this.currentPosition++;
 		for (var i = this.currentPosition; i < this.aisleLength; i++) {
-			this.currentPosition++;
-			this.path.push({x: this.currentAisle, y:this.currentPosition});
+			this.path.push({x: this.currentAisle, y:i});
 		}
+		this.currentPosition = this.aisleLength - 1;
 	}
 	else if (direction === -1) {
-		for (var i = this.currentPosition; i > 0; i--) {
-			this.currentPosition--;
-			this.path.push({x: this.currentAisle, y:this.currentPosition});
+		this.currentPosition--;
+		for (var i = this.currentPosition; i >= 0; i--) {
+			this.path.push({x: this.currentAisle, y:i});
+			console.log("in move to end, current position is:", i);
 		}
+		this.currentPosition = 0;
 	}
 }
 
@@ -105,6 +113,10 @@ AisleMap.prototype.chooseNextAisle = function() {
 }
 
 AisleMap.prototype.chooseDirection = function(direction) {
+	//if no more aisles to visit, just keep going in the same direction
+	if (this.currentAisle === this.nextAisle) {
+		return;
+	}
 	//correponds to direction, 1 is top half of aisle, -1 is bottom half of aisle
 	var side;
 	var hasItem = false;
@@ -123,7 +135,7 @@ AisleMap.prototype.chooseDirection = function(direction) {
 	console.log("side is:", side);
 	//check if there are any items on that side
 	if (side === 1) {
-		for (var i = this.aisleLength-1; i > 0; i--) {
+		for (var i = this.aisleLength-1; i > this.aisleLength/2; i--) {
 			if (this.grid[this.nextAisle][i]) {
 				hasItem = true;
 				break;
@@ -131,7 +143,7 @@ AisleMap.prototype.chooseDirection = function(direction) {
 		}
 	}
 	else if (side === -1) {
-		for (var i = 0; i < this.aisleLength; i++) {
+		for (var i = 0; i < this.aisleLength/2; i++) {
 			if (this.grid[this.nextAisle][i]) {
 				hasItem = true;
 				break;
@@ -143,41 +155,46 @@ AisleMap.prototype.chooseDirection = function(direction) {
 	if (hasItem) {
 		this.direction = side;
 	}
+	else {
+		this.direction = -side;
+	}
 }
 
 AisleMap.prototype.createPath = function() {
 	var path = [];
 
-	for (var i = 0; i < this.aislesWithItems)
+	for (var i = 0; i < this.aislesWithItems.length - 1; i++) {
+		//choose an initial direction
+		if (this.currentPosition === 0) {
+			this.direction = 1;
+		}
+		else {
+			this.direction = -1;
+		}
+		console.log("main loop beforer start direction is", this.direction);
 		//moves down the aisle until there are no more items
-		while(this.checkAisle(1)) {
-			this.moveToItem(1);
+		while(this.checkAisle(this.direction)) {
+			this.moveToItem(this.direction);
 		}
 		//if no more items in aisle, add current location to path
 		this.path.push({x: this.currentAisle, y:this.currentPosition});
-		//determine new direction
+		//figure out which aisle to move to next
 		this.chooseNextAisle();
 		console.log("next aisle:", this.nextAisle);
+		//determine new direction
 		this.chooseDirection();
 		console.log("new direction:", this.direction);
-		this.moveToEnd(-1);
-		console.log(this.path);
+		//move to end of current aisle in selected direction
+		this.moveToEnd(this.direction);
+		//move to next aisle
 		this.currentAisle = this.nextAisle;
+		//rise and repeat until complete
 	}
-
-	// 	//moves down the aisle until there are no more items
-	// while(this.checkAisle(1)) {
-	// 	this.moveToItem(1);
-	// }
-	// //if no more items in aisle, add current location to path
-	// this.path.push({x: this.currentAisle, y:this.currentPosition});
-	// //determine new direction
-	// this.chooseNextAisle();
-	// console.log("next aisle:", this.nextAisle);
-	// this.chooseDirection();
-	// console.log("new direction:", this.direction);
-	// this.moveToEnd(-1);
-	// console.log(this.path);
+	console.log(this.path);
+	console.log("current aisle is:", this.currentAisle);
+	console.log("next aisle is:", this.nextAisle);
+	console.log("current position is:", this.currentPosition);
+	console.log("direction at end is:", this.direction);
 }
 
 
