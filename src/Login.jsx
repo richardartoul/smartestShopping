@@ -29,7 +29,7 @@ var Login = Eventful.createClass({
               <i className="fa fa-key fa-lg"></i>&nbsp;&nbsp;&nbsp;<input ref="password" placeholder="Password" type="password" />
             </div>
                 <button type="submit" className="btn btn-primary btn-block"><i className="fa fa-user fa-lg"></i>&nbsp;&nbsp;&nbsp;Login</button>
-                <p className="text-muted text-center"><small>If you don't already have an account...</small></p>
+                <p className="text-muted text-center"><small>If you do not already have an account...</small></p>
                 <a className="btn btn-sm btn-success btn-block" href="#/register"><i className="fa fa-user-plus fa-lg"></i>&nbsp;&nbsp;&nbsp;Register</a>
               </form>
             </div>

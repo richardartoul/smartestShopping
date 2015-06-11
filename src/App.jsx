@@ -9,6 +9,10 @@ var ModeToggle = require('./ModeToggle');
 var auth = require('./auth');
 var url = require('./url');
 
+var Autocomplete = require('../../lib/main');
+var Combobox = Autocomplete.Combobox;
+var ComboboxOption = Autocomplete.Option;
+
 var App = Eventful.createClass({
   contextTypes: {
     router: React.PropTypes.func
@@ -21,6 +25,7 @@ var App = Eventful.createClass({
       totalCost: 0,
       budget: 100,
       remainingBudget: 100,
+      predictedFoods: predictedFoods,
       mode: ModeToggle.EDITING
     };
   },
@@ -64,11 +69,9 @@ var App = Eventful.createClass({
   },
 
   setRemainingBudget: function() {
-      // if (this.state.budget - this.state.totalCost > 0){
         this.setState({
           remainingBudget: this.state.budget - this.state.totalCost
         })
-      // }
   },
 
   addItem: function(item) {
@@ -78,7 +81,6 @@ var App = Eventful.createClass({
     $.post(url.addItem, item)
     .done(function(data) {
       this.getList();
-      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error adding new item to list:', status, err);
@@ -104,7 +106,6 @@ var App = Eventful.createClass({
     })
     .done(function(data) {
       this.getList();
-      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error deleting item from list:', status, err);
