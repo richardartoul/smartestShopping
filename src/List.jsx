@@ -12,7 +12,7 @@ var List = Eventful.createClass({
   },
   renderListItem: function(itemData, id) {
     return (
-      <ListItem key={id} index={id} name={itemData.name} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
+      <ListItem key={id} index={id} name={itemData.name} price={itemData.data.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
     );
   },
   filterList: function(event) {
@@ -36,6 +36,10 @@ var List = Eventful.createClass({
                       <input className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
                     </form>
+                </div>
+                <div className="budgetDisplay">
+                  <h2 className="setBudget">Budget: ${this.props.budget}</h2>
+                  <h2 className="remainingBudget">Remaining: ${this.props.remainingBudget}</h2>
                 </div>
                 <ul>
                   {this.props.filteredItems.map(this.renderListItem)}
