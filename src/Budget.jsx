@@ -1,11 +1,10 @@
 var React = require('react');
 var Eventful = require('eventful-react');
-var ModeToggle = require('./ModeToggle');
 var NavToggle = require('./NavToggle');
 var List = require('./List');
 var auth = require('./auth');
 
-var Home = Eventful.createClass({
+var Budget = Eventful.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -25,11 +24,10 @@ var Home = Eventful.createClass({
     return (
       <div id="home">
         <NavToggle />
-        <ModeToggle mode={this.props.data.mode} />
-        <List filteredItems={this.props.data.filteredItems} mode={this.props.data.mode} />
+        <h1> will set up budget here </h1>
       </div>
     );
   }
 });
 
-module.exports = Home;
+module.exports = Budget;
