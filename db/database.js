@@ -22,3 +22,6 @@ module.exports = {
     past_items: [{ type: Schema.Types.ObjectId, ref: 'Item'}]
   })
 };
+
+
+product.find({})
