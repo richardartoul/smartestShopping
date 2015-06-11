@@ -7,7 +7,8 @@ var db = mongoose.connect('mongodb://localhost:27017/savagetadpole');
 var productSchema = new Schema({
   name: String,
   cost: String,
-  category: String
+  category: String,
+  prize: Number
 });
 
 var Product = db.model('product', productSchema);
@@ -31,6 +32,19 @@ fs.readFile('categories/produce.json', {encoding: 'utf8'}, function (err, data) 
   for (var index = 0, size = products.length; index < products.length; index++){
     var product = products[index];
     (function (product, index){
+      if (product.cost) {
+        product.prize = product.cost;
+        product.prize = product.prize.replace('$', '');
+        if (product.prize.indexOf('(')) {
+          product.prize.split('').splice(0, product.prize.indexOf('(')).join('');
+        }
+        if (product.prize.indexOf('/')) {
+          product.prize.split('').splice(0, product.prize.indexOf('/')).join('');
+        }
+        product.prize = parseFloat(product.prize);
+      }else {
+        product.prize = 0;      
+      }
       Product.findOne(product, function (err, product_result){
         if (err) throw err;
         if (!product_result) {
