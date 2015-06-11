@@ -181,9 +181,18 @@ AisleMap.prototype.chooseDirection = function(direction) {
 	}
 
 	//optimmization for last aisle
-	if (this.nextAisle === this.aislesWithItems.length-1 && hasItem) {
-		this.direction = 1;
-		return;
+	if (this.nextAisle === this.aislesWithItems.length-1 && this.side === -1) {
+		var topItem = false;
+		for (var i = this.aisleLength-1; i > (this.aisleLength-1)/2; i--) {
+			if (this.grid[this.nextAisle][i]) {
+				topItem = true;
+				break;
+			}
+		}
+		if (topItem) {
+			this.direction = 1;
+			return;
+		}
 	}
 	console.log("hasItem is:", hasItem);
 	//if there is an item on the same side, head in that direction, otherwise continue in same direction
