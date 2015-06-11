@@ -34,15 +34,9 @@ var List = Eventful.createClass({
             <div className="ibox-content">
               <div className="row">
                 <div className="list">
-                  <div className='new-item-input'>
+                  <div className='new-item-input ui-widget'>
                     <form name="new-item-form" onSubmit={this.addItem}>
-                      // <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
-                      <Combobox
-                        // onInput={this.handleInput}
-                        // onSelect={this.handleStateSelect}
-                        // value={this.state.selectedStateId}
-                      >
-                      </Combobox>
+ <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
                     </form>
                 </div>
