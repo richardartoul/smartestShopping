@@ -15,6 +15,8 @@ module.exports = {
 
   user : new Schema({
     username: String,
+    budget: Number,
+    balance: Number,
     list: [{ type: Schema.Types.ObjectId, ref: 'Item'}],
     past_items: [{ type: Schema.Types.ObjectId, ref: 'Item'}]
   })

@@ -38,7 +38,7 @@ var storeOrderedList = function(username, list, cb) {
 
 module.exports = {
   createUser: function(uid) {
-    var user = new User({username:uid, list:[], past_items:[]});
+    var user = new User({username:uid, budget:100, balance:100, list:[], past_items:[]});
     var findUser = Q.nbind(User.find,User);
     var createUser = Q.nbind(User.create,User);
 
