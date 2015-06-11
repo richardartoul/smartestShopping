@@ -27,7 +27,7 @@ var drawPath = function() {
 	animate();	
 }	
 
-var drawAisles = function(numAisles) {
+var drawAisles = function() {
 	for (var i = 0; i < testMap.numAisles; i++) {
 		context.beginPath();
 		context.moveTo(480+40*i, 500);
@@ -38,5 +38,15 @@ var drawAisles = function(numAisles) {
 	}
 } 
 
+var drawItems = function() {
+	for (var i = 0; i < testMap.items.length; i++) {
+		context.beginPath();
+		context.arc(500 + 40*testMap.items[i].x, 500 - 40*testMap.items[i].y, 4, 0, 2 * Math.PI);
+		context.stroke();
+		// context.fillRect(500 + 40*testMap.items[i].x, 500 - 40*testMap.items[i].y,10,10)
+	}
+}
+
 drawAisles();
+drawItems();
 drawPath();
