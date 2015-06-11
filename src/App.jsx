@@ -30,6 +30,7 @@ var App = Eventful.createClass({
     .done(function(data) {
       this.setState({items: data});
       this.setState({filteredItems: data});
+      this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error getting item list:', status, err);
@@ -55,12 +56,18 @@ var App = Eventful.createClass({
         return total + num
       }, 0)
     })
+    this.setRemainingBudget();
   },
 
   setRemainingBudget: function() {
-    this.setState({
-      remainingBudget: this.state.budget - this.state.totalCost;
-    })
+    // if (this.state.budget > this.state.totalCost) {
+      // console.log('remainingBudget is > 0');
+      console.log(this.state.totalCost, ": total cost");
+      console.log(this.state.remainingBudget, ": remaining budget");
+      this.setState({
+        remainingBudget: this.state.budget - this.state.totalCost
+      })
+    // } 
   },
 
   addItem: function(item) {
@@ -68,8 +75,6 @@ var App = Eventful.createClass({
     .done(function(data) {
       this.getList();
       this.addPrices();
-      this.setRemainingBudget();
-      console.log('remainingBudget', this.state.remainingBudget);
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error adding new item to list:', status, err);
@@ -96,7 +101,6 @@ var App = Eventful.createClass({
     .done(function(data) {
       this.getList();
       this.addPrices();
-      this.setRemainingBudget();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error deleting item from list:', status, err);
@@ -116,7 +120,7 @@ var App = Eventful.createClass({
   registerUser: function(userData) {
     $.post(url.register, userData)
     .done(function(data) {
-      console.log('registered:',data);
+      console.log('registered:', data);
       this.context.router.transitionTo('/');
     }.bind(this))
     .fail(function(xhr, status, err) {
@@ -171,6 +175,10 @@ var App = Eventful.createClass({
     })
 
     this.getList();
+  },
+
+  componentDidUpdate: function(prevProps, prevState) {
+    localStorage.state = JSON.stringify(this.state);
   },
 
   render: function() {
