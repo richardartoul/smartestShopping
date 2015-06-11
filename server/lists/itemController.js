@@ -64,6 +64,7 @@ module.exports = {
           createItem(newItem)
           .then(function(createdItem) {
             req.smartShoppingData = createdItem;
+            res.send(201).json(createdItem);
             next();
           })
           .catch(function(err) {
