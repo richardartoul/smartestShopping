@@ -15,16 +15,6 @@ var List = Eventful.createClass({
       <ListItem key={id} index={id} name={itemData.name} price={itemData.data.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
     );
   },
-  addBudget: function(event) {
-    event.preventDefault();
-    var newBudget = event.target.newBudgetInput.value;
-    event.target.newItemInput.value = '';
-
-    this.emit('add-budget', { budget: newBudget});
-  },
-  renderRemainingBudget: function() {
-    return this.
-  },
   filterList: function(event) {
     event.preventDefault();
     this.emit('filter-list', event.target.value.toLowerCase());
@@ -49,7 +39,7 @@ var List = Eventful.createClass({
                 </div>
                 <div className="budgetDisplay">
                   <h2 className="setBudget">Budget: ${this.props.budget}</h2>
-                  <h2 className="remainingBudget">Remaining: ${this.remainingBudget}</h2>
+                  <h2 className="remainingBudget">Remaining: ${this.props.remainingBudget}</h2>
                 </div>
                 <ul>
                   {this.props.filteredItems.map(this.renderListItem)}
