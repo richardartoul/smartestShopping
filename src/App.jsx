@@ -55,7 +55,11 @@ var App = Eventful.createClass({
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
+<<<<<<< HEAD
         return total + num
+=======
+        return total + num;
+>>>>>>> [feature] Quantity updates balance
       }, 0)
     }) 
     //if the item is not being archived (args are only sent from archiveItem)
@@ -65,7 +69,14 @@ var App = Eventful.createClass({
   },
 
   setRemainingBudget: function(cost) {
-    var itemCost = cost || this.state.totalCost;
+    var itemCost;
+    if(cost) {
+      itemCost = cost + this.state.totalCost;
+    } else {
+      itemCost = this.state.totalCost;
+    }
+    // var itemCost = cost || this.state.totalCost;
+    console.log('totalcost', this.state.totalCost);
       this.setState({
         remainingBudget: this.state.budget - itemCost
       })
