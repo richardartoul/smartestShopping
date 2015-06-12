@@ -22,6 +22,7 @@ var List = Eventful.createClass({
     event.preventDefault();
     this.emit('filter-list', event.target.value.toLowerCase());
   },
+
   render: function() {
     return (
       <div className="row">
@@ -34,7 +35,7 @@ var List = Eventful.createClass({
             <div className="ibox-content">
               <div className="row">
                 <div className="list">
-                  <div className='new-item-input ui-widget'>
+                  <div className='new-item-input'>
                     <form name="new-item-form" onSubmit={this.addItem}>
  <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
