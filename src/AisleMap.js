@@ -242,6 +242,7 @@ AisleMap.prototype.createPath = function() {
 	console.log("direction at end is:", this.direction);
 }
 
+module.exports = AisleMap;
 
 //tests
 var testMap = new AisleMap();
