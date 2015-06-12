@@ -20,15 +20,29 @@ module.exports = {
         console.error(err);
         res.status(500).send({error: 'Server Error'});
       } else {
-        console.log("seems all working here ");
-        res.send('done');
+        res.send(newBudget);
       }
     });
   },
 
-  setBalance: function(balance){ // resets the current Balance to value if present or Budget amount on current user
+  setBalance: function(req,res){ // resets the current Balance to value if present or Budget amount on current user
 
-  }
+  },
+
+  getCurrentBudget: function(req, res) {
+    var username = req.uid;
+    User
+    .findOne({username: username})
+    .exec(function(err, user) {
+
+      if(err) {
+        console.error(err);
+        res.status(500).send({error: 'Server Error in Budget Retrieval'});
+      } else {
+        res.json(user.budget);
+      }
+    });
+  },
 
 
 }

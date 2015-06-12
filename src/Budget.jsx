@@ -21,16 +21,11 @@ var Budget = Eventful.createClass({
   },
   
   updateBudget: function(e) {
-      console.log("invoked updateBudget in jsx " + e);
-
     e.preventDefault();
     var updatedBudget = e.target.updateBudgetInput.value;
     e.target.updateBudgetInput.value = '';
-
     this.emit('update-budget', { name: updatedBudget });
-
   },
-
 
 
   render: function() {
@@ -48,8 +43,8 @@ var Budget = Eventful.createClass({
             <div className="ibox-content">
 
               <div className="row">
-                <h2 className="setBudget">Current Budget: ${this.props.budget}</h2>
-                <h2 className="remainingBudget">Remaining Balance: ${this.props.remainingBudget}</h2>
+                <h2 className="setBudget">Current Budget: ${this.props.data.budget}</h2>
+                <h2 className="remainingBudget">Remaining Balance: ${this.props.data.remainingBudget}</h2>
               </div>
 
               <div className="row">
