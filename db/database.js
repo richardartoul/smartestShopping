@@ -6,6 +6,7 @@ module.exports = {
     name: String,
     timestamp: { type: Date, default: Date.now },
     price: Number,
+    category: String,
     data: {
       frequency: Number,
       coupons: [String],

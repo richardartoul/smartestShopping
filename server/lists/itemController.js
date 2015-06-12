@@ -44,7 +44,7 @@ module.exports = {
     var findItem = Q.nbind(Item.findOne, Item);
     var createItem = Q.nbind(Item.create, Item);
 
-    findItem({name: itemName})
+    findItem({name: new RegExp(itemName, "i")})
     .then(function(match) {
       if (match) {
         req.smartShoppingData = match;
