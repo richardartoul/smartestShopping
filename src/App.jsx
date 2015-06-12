@@ -20,8 +20,7 @@ var App = Eventful.createClass({
       items: [],
       filteredItems: [],
       totalCost: 0,
-      // quantity: 1,
-      budget: 0,
+      budget: this.getBudget(),
       remainingBudget: 0,
       mode: ModeToggle.EDITING
     };
@@ -56,7 +55,7 @@ var App = Eventful.createClass({
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
-        return total + num
+        return total + num;
       }, 0)
     }) 
     //if the item is not being archived (args are only sent from archiveItem)
@@ -65,10 +64,18 @@ var App = Eventful.createClass({
     } 
   },
 
-  setRemainingBudget: function() {
-        this.setState({
-          remainingBudget: this.state.budget - this.state.totalCost
-        })
+  setRemainingBudget: function(cost) {
+    var itemCost;
+    if(cost) {
+      itemCost = cost + this.state.totalCost;
+    } else {
+      itemCost = this.state.totalCost;
+    }
+    // var itemCost = cost || this.state.totalCost;
+    console.log('totalcost', this.state.totalCost);
+      this.setState({
+        remainingBudget: this.state.budget - itemCost
+      })
   },
 
   addItem: function(item) {
@@ -204,6 +211,10 @@ var App = Eventful.createClass({
       } else {
         this.deleteItem(data);
       }
+    });
+    this.on('set-quantity', function(data) {
+      console.log('set-qty data', data.index);
+      this.setRemainingBudget(data.index);
     });
     this.on('update-budget', function(data){
       this.updateBudget(data);
