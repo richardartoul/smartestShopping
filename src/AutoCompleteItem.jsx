@@ -6,12 +6,10 @@ var url = require('./url');
 var AutocompleteItem = Eventful.createClass({
   getInitialState: function() {
     return {
-      value: '',
+      value: this.props.item.name,
+      price: this.props.item.price,
+      _id: this.props.item.price
     };
-  },
-
-  componentWillReceiveProps: function(newProps) {
-    this.setState({ value: newProps.name, price: newProps.price, _id: newProps.id });
   },
 
   selectItem: function(){
@@ -28,13 +26,12 @@ var AutocompleteItem = Eventful.createClass({
   },
 
   render: function() {
-
     return (
       <li className="list-item animated fadeInDown">
         <div className="autocomplete" onClick={this.selectItem}>
           {this.state.value}
-          <span>
-            ${this.state.price}
+          <span className="autocomplete__price">
+          ${this.state.price}
           </span>
         </div>
       </li>
