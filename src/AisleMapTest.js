@@ -2,7 +2,9 @@ var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 var counter = 0;
 var fade = 0;
+var grow = 0;
 fadeDirection = 0.01;
+var growDirection = 0.1;
 var tweenedPath = [];
 
 context.beginPath();
@@ -20,7 +22,16 @@ var updateFade = function() {
 		fadeDirection = 0.01;
 	}
 	fade += fadeDirection;
-	console.log(fade);
+}
+
+var updateGrow = function() {
+	if (grow >= 5) {
+		growDirection = -0.1;
+	}
+	else if (grow <= 0) {
+		growDirection = 0.1;
+	}
+	grow += growDirection;
 }
 
 var determineDirection = function(array, index, property) {
@@ -73,9 +84,10 @@ var clearCanvas = function() {
 }
 
 var drawDiamond = function(ctx,x,y) {
-  	ctx.lineTo(x+15,y+10);
-    ctx.lineTo(x+7.5, y+20);
-    ctx.lineTo(x,y+10);
+	ctx.moveTo(x+7.5,y-grow);
+	ctx.lineTo(x+15+grow,y+10);
+  ctx.lineTo(x+7.5, y+20+grow);
+  ctx.lineTo(x-grow,y+10);
 	ctx.fillStyle = "rgb(102, 204, 0)"; //filled green for inner content
 	ctx.lineWidth = 1; // 1px width of outline
 	ctx.strokeStyle = "rgb(0, 50, 200)"; //filled red for outline
@@ -86,29 +98,21 @@ var drawDiamond = function(ctx,x,y) {
 }
 	
 var drawPath = function() {
-
 	context.beginPath();
-	var x = 500 + tweenedPath[counter].x * 40;
+	var x = 494 + tweenedPath[counter].x * 40;
 	var y = 500 - tweenedPath[counter].y * 40
-	context.moveTo(x+7.5,y);
-	var animate = function() {
-	  	// context.lineTo(testMap.path[counter].x*40+500, -testMap.path[counter].y*40+500);
-	  	drawDiamond(context,x,y);
-		// context.lineWidth = 5;
-		// context.strokeStyle = 'blue';
-		// context.stroke();
-		// if (counter < testMap.path.length) {
-		// 	setTimeout(animate, 100);
-		// }
-	}
-	animate();	
+	drawDiamond(context,x,y);	
 }	
 
 var drawAisles = function() {
+	var backgroundCanvas = document.getElementById('backgroundCanvas');
+	var context = backgroundCanvas.getContext('2d');
+	context.beginPath();
+	context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
+
 	for (var i = 0; i < testMap.numAisles; i++) {
-		context.beginPath();
-		context.moveTo(480+40*i, 500);
-		context.lineTo(480+40*i, 100);
+		context.moveTo(480+40*i, 520);
+		context.lineTo(480+40*i, 120);
 		context.lineWidth = 2;
 		context.strokeStyle = 'black';
 		context.stroke();
@@ -131,13 +135,15 @@ var drawItems = function() {
 
 var render = function() {
 	clearCanvas();
-	drawAisles();
 	drawItems();
 	drawPath();
 	updateFade();
+	updateGrow();
 	counter++;
+	requestAnimationFrame(render);
 }
 
+drawAisles();
 preTween();
+render();
 console.log(tweenedPath);
-setInterval(render,16);
