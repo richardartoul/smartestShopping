@@ -101,9 +101,9 @@ var renderAisleMap = function(aisleMap){
 		ctx.lineTo(x+15+grow,y+10);
 	  ctx.lineTo(x+7.5, y+20+grow);
 	  ctx.lineTo(x-grow,y+10);
-		ctx.fillStyle = "rgb(102, 204, 0)"; //filled green for inner content
+		ctx.fillStyle = "orange"; //filled green for inner content
 		ctx.lineWidth = 1+0.2*grow; // 1px width of outline
-		ctx.strokeStyle = "rgb(0, 50, 200)"; //filled red for outline
+		ctx.strokeStyle = "orange"; //filled red for outline
 		ctx.closePath(); 
 		//Fill the shape with colors that defined above
 		ctx.fill();
@@ -115,7 +115,37 @@ var renderAisleMap = function(aisleMap){
 		var x = xOffset-6 + tweenedPath[counter].x * 40;
 		var y = yOffset - tweenedPath[counter].y * 40
 		drawDiamond(context,x,y);	
-	}	
+	}
+
+	var drawTraveledPath = function() {
+		// var counter = 0;
+
+		context.beginPath();
+		context.moveTo(xOffset + tweenedPath[0].x * 40+2, yOffset - tweenedPath[0].y * 40);
+		for (var i = 0; i < counter; i++) {
+			if (i > 20) {
+				if (determineDirection(tweenedPath,i-6, 'y') === 1) {
+					// if (determineDirection(tweenedPath,i-6, 'x') === 1) {
+	  				// context.lineTo(xOffset + tweenedPath[i-6].x*40+2, yOffset - tweenedPath[i-6].y*40+15);
+					// }
+					// else {
+	  				context.lineTo(xOffset + tweenedPath[i-6].x*40+2, yOffset - tweenedPath[i-6].y*40+12);
+					// }
+				}
+				else {
+					// if (determineDirection(tweenedPath,i-6, 'x') === -1) {
+	  				// context.lineTo(xOffset + tweenedPath[i-6].x*40+2, yOffset - tweenedPath[i-6].y*40+5);
+					// }
+					// else {
+	  				context.lineTo(xOffset + tweenedPath[i-6].x*40+2, yOffset - tweenedPath[i-6].y*40+12)
+					// }
+				}
+			}
+		}
+		context.lineWidth = 2;
+		context.strokeStyle = 'lightBlue';
+		context.stroke();
+	}		
 
 	var drawAisles = function() {
 		backgroundContext.beginPath();
@@ -123,13 +153,13 @@ var renderAisleMap = function(aisleMap){
 
 		for (var i = 0; i < aisleMap.numAisles; i++) {
 			// backgroundContext.moveTo(xOffset-20+40*i, yOffset+20);
-			backgroundContext.strokeRect(xOffset-20+40*i, 40,12, yOffset-125)
+			backgroundContext.strokeRect(xOffset-25+40*i, 135,12, yOffset-130)
 			// backgroundContext.lineTo(xOffset-20+40*i, 125);
 			// backgroundContext.lineWidth = 12;
 			backgroundContext.strokeStyle = 'black';
 			backgroundContext.stroke();
 			backgroundContext.font ="18px serif";
-			backgroundContext.fillText((i+1).toString(), xOffset-6+40*i, yOffset+40);
+			backgroundContext.fillText((i+1).toString(), xOffset-5+40*i, yOffset+23);
 		}
 	} 
 
@@ -147,7 +177,7 @@ var renderAisleMap = function(aisleMap){
 			var y = yOffset - 40*aisleMap.items[i].y;
 			// backgroundContext.clearRect(x-4,y-4,8, 8);
 			context.beginPath();
-			context.fillStyle = "cyan";
+			context.fillStyle = "red";
 			context.strokeStyle = "black";
 			context.lineWidth = 0.5
 			// context.fill();
@@ -157,14 +187,14 @@ var renderAisleMap = function(aisleMap){
 
 			// console.log(i%2);
 			if (i % 2 === 1 && aisleMap.items[i].x !== lastAisleWithItem) {
-				backgroundContext.clearRect(x-6,y-4,6, 15);
-				context.fillRect(x-6,y-4,6, 15);
-				context.strokeRect(x-6,y-4,6, 15);
+				backgroundContext.clearRect(x-4,y-4,6, 6);
+				context.fillRect(x-4,y-4,6, 6);
+				context.strokeRect(x-4,y-4,6, 6);
 			}
 			else {
-				backgroundContext.clearRect(x-40,y-4,6, 15);
-				context.fillRect(x-40,y-4,6, 15);
-				context.strokeRect(x-40,y-4,6, 15);
+				backgroundContext.clearRect(x-40,y-4,6, 6);
+				context.fillRect(x-40,y-4,6, 6);
+				context.strokeRect(x-40,y-4,6, 6);
 			}
 		}
 		context.restore();
@@ -178,6 +208,7 @@ var renderAisleMap = function(aisleMap){
 		clearCanvas();
 		drawItems();
 		drawPath();
+		drawTraveledPath();
 		updateFade();
 		updateGrow();
 		counter++;
