@@ -33,6 +33,7 @@ module.exports = {
         expiration: new Date(2015,8,16)
       }
     });
+    console.log(db.products.findOne({'name':'Ginger'}));
 
     var findItem = Q.nbind(Item.findOne, Item);
     var createItem = Q.nbind(Item.create, Item);

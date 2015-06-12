@@ -1,17 +1,24 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var fs = require('fs');
-var models = require('../db/database.js');
+
 var db = mongoose.connect('mongodb://localhost:27017/savagetadpole');
 
-var Item = db.model('item', models.item);
-var total_items = 0;
+var productSchema = new Schema({
+  name: String,
+  cost: String,
+  category: String,
+  price: Number
+});
+
+var Product = db.model('product', productSchema);
+var total_products = 0;
 var finish = function(index) {
-  if (index === total_items - 1) {
+  if (index === total_products - 1) {
     // count products
-    Item.count({}, function (err, count){
+    Product.count({}, function (err, count){
       if (err) throw err;
-      console.log('Total items ', count);
+      console.log('Total products ', count);
     });
   };
   return;
@@ -20,31 +27,31 @@ var finish = function(index) {
 //read the files and input into the database
 fs.readFile('categories/produce.json', {encoding: 'utf8'}, function (err, data) {
   if (err) throw err;
-  var items = JSON.parse(data);
-  total_items = items.length;
-  for (var index = 0, size = items.length; index < items.length; index++){
-    var item = items[index];
-    (function (item, index){
-      if (item.cost) {
-        item.price = item.cost;
-        item.price = item.price.replace('$', '');
-        if (item.price.indexOf('(')) {
-          item.price.split('').splice(0, item.price.indexOf('(')).join('');
+  var products = JSON.parse(data);
+  total_products = products.length;
+  for (var index = 0, size = products.length; index < products.length; index++){
+    var product = products[index];
+    (function (product, index){
+      if (product.cost) {
+        product.price = product.cost;
+        product.price = product.price.replace('$', '');
+        if (product.price.indexOf('(')) {
+          product.price.split('').splice(0, product.price.indexOf('(')).join('');
         }
-        if (item.price.indexOf('/')) {
-          item.price.split('').splice(0, item.price.indexOf('/')).join('');
+        if (product.price.indexOf('/')) {
+          product.price.split('').splice(0, product.price.indexOf('/')).join('');
         }
-        item.price = parseFloat(item.price);
+        product.price = parseFloat(product.price);
       }else {
-        item.price = 0;      
+        product.price = 0;      
       }
-      Item.findOne(item, function (err, item_result){
+      Product.findOne(product, function (err, product_result){
         if (err) throw err;
-        if (!item_result) {
-          Item.create(item, function (err, success){
+        if (!product_result) {
+          Product.create(product, function (err, success){
             if (err) throw err;
             if (success) {
-              console.log('Add item ', item.name);
+              console.log('Add item ', product.name);
               finish(index);
             }
           });
@@ -52,6 +59,6 @@ fs.readFile('categories/produce.json', {encoding: 'utf8'}, function (err, data) 
           finish(index);
         }
       });
-    })(item, index);
+    })(product, index);
   }
 });
