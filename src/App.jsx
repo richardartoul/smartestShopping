@@ -55,7 +55,7 @@ var App = Eventful.createClass({
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
-        return total + num
+        return parseFloat(total + num).toFixed(2)
       }, 0)
     }) 
     //if the item is not being archived (args are only sent from archiveItem)

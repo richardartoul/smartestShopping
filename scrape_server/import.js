@@ -17,41 +17,47 @@ var finish = function(index) {
  return;
 };
 
-//read the files and input into the database
-fs.readFile('categories/produce.json', {encoding: 'utf8'}, function (err, data) {
- if (err) throw err;
- var items = JSON.parse(data);
- total_items = items.length;
- for (var index = 0, size = items.length; index < items.length; index++){
-   var item = items[index];
-   (function (item, index){
-     if (item.cost) {
-       item.price = item.cost;
-       item.price = item.price.replace('$', '');
-       if (item.price.indexOf('(')) {
-         item.price.split('').splice(0, item.price.indexOf('(')).join('');
-       }
-       if (item.price.indexOf('/')) {
-         item.price.split('').splice(0, item.price.indexOf('/')).join('');
-       }
-       item.price = parseFloat(item.price);
-     }else {
-       item.price = 0;      
+fs.readdir('./webscrape/realdata', function (err, files) { if (err) throw err;
+  files.forEach( function (file) {
+    fs.readFile('./webscrape/realdata/' + file, {encoding: 'utf8'}, function (err, data) {
+     if (err) throw err;
+     var items = JSON.parse(data);
+     total_items = items.length;
+     for (var index = 0, size = items.length; index < items.length; index++){
+       var item = items[index];
+       (function (item, index){
+        if (item.cost) {
+         item.price = item.cost;
+         item.price = item.price.replace('$', '');
+         if (item.price.indexOf('(')) {
+           item.price.split('').splice(0, item.price.indexOf('(')).join('');
+         }
+         if (item.price.indexOf('/')) {
+           item.price.split('').splice(0, item.price.indexOf('/')).join('');
+         }
+         item.price = parseFloat(item.price);
+        }else {
+         item.price = 0;      
+        }
+        Item.findOne(item, function (err, item_result){
+         if (err) throw err;
+         if (!item_result) {
+           Item.create(item, function (err, success){
+             if (err) throw err;
+             if (success) {
+               console.log('Add item ', item.name);
+               finish(index);
+             }
+           });
+         }else{
+           finish(index);
+         }
+        });
+       })(item, index);
      }
-     Item.findOne(item, function (err, item_result){
-       if (err) throw err;
-       if (!item_result) {
-         Item.create(item, function (err, success){
-           if (err) throw err;
-           if (success) {
-             console.log('Add item ', item.name);
-             finish(index);
-           }
-         });
-       }else{
-         finish(index);
-       }
-     });
-   })(item, index);
- }
+    });
+    total_items = 0;
+  });
 });
+
+//read the files and input into the database
