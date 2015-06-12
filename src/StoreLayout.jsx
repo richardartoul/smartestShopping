@@ -43,11 +43,15 @@ var StoreLayout = Eventful.createClass({
   },
 
   render: function() {
+    var canvasStyle = {
+      position: 'absolute'
+    }
     return (
       <div id="home">
         <NavToggle />
         <div className="row">
-          <canvas id="myCanvas" width="1000" height="1000"></canvas>
+          <canvas className="aisle-canvas" id="myCanvas" width="1000" height="1000"></canvas>
+          <canvas className="aisle-canvas" id="backgroundCanvas" width="1000" height="1000"></canvas>
         </div>
       </div>
     );
