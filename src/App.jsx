@@ -72,6 +72,9 @@ var App = Eventful.createClass({
   },
 
   addItem: function(item) {
+    console.log("url add item : " + url.testItem);
+    console.log("url Update item : " + url.updateItem);
+
     $.post(url.addItem, item)
     .done(function(data) {
       this.getList();
@@ -116,6 +119,20 @@ var App = Eventful.createClass({
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error archiving item in list:', status, err);
+    });
+  },
+
+  updateBudget: function(budget) {
+      
+      console.log("event hit updateBudget" + budget);
+
+    $.post(url.updateBudget, budget)
+    .done(function(data) {
+      // this.getList();
+      console.log("hi -- just updated the budget" + data);
+    }.bind(this))
+    .fail(function(xhr, status, err) {
+      console.error('Error updating Budget for the user:', status, err);
     });
   },
 
@@ -175,6 +192,9 @@ var App = Eventful.createClass({
       } else {
         this.deleteItem(data);
       }
+    });
+    this.on('update-budget', function(data){
+      this.updateBudget(data);
     });
     this.on('change-mode', function(data) {
       this.changeMode(data);

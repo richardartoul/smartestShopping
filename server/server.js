@@ -1,6 +1,7 @@
 var express = require('express');
 var listController = require('./lists/listController.js');
 var itemController = require('./lists/itemController.js');
+var budgetController = require('./budget/budgetController.js');
 var firebaseAuth = require('./middleware/authFirebase.js');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -38,6 +39,9 @@ app.post('/api/item/add', listController.addItemToList);
 
 app.use('/api/item/update', itemController.createNewItem);
 app.post('/api/item/update', listController.updateItem);
+
+// app.use('/api/budget/update', itemController.createBudget);  // initialize the budget to 0 at creation
+app.post('/api/budget/update', budgetController.updateBudget);
 
 app.delete('/api/item/delete', listController.deleteItemFromList);
 app.post('/api/item/archive', listController.addItemToArchive);
