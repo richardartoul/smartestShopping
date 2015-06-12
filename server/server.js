@@ -41,6 +41,7 @@ app.use('/api/item/update', itemController.createNewItem);
 app.post('/api/item/update', listController.updateItem);
 
 // app.use('/api/budget/update', itemController.createBudget);  // initialize the budget to 0 at creation
+app.get('/api/budget/', budgetController.getCurrentBudget);
 app.post('/api/budget/update', budgetController.updateBudget);
 
 app.delete('/api/item/delete', listController.deleteItemFromList);

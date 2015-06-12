@@ -5,33 +5,8 @@ var Router = require('react-router');
 var Link = Router.Link;
 
 var NavToggle = Eventful.createClass({
-  // statics: {
-  //   // modes enum
-  //   SHOPPING: {},
-  //   EDITING: {}
-  // },
-  
-  // getInitialState: function() {
-  //   return {
-  //     mode: ModeToggle.EDITING
-  //   };
-  // },
-  // changeHandler: function(e) {
-  //   var newMode = ModeToggle[e.target.value];
-  //   this.setState({ mode: newMode });
-  //   this.emit('change-mode', { mode: newMode })
-  // },
-
+ 
   render: function() {
-    // var buttonClasses = {
-    //   shopping: 'btn btn-sm btn-white',
-    //   editing: 'btn btn-sm btn-white'
-    // };
-    // if (this.state.mode === ModeToggle.SHOPPING) {
-    //   buttonClasses.shopping += ' active';
-    // } else {
-    //   buttonClasses.editing += ' active';
-    // }
 
     return (
       <div>

@@ -15,13 +15,14 @@ var App = Eventful.createClass({
   },
 
   getInitialState: function() {
+    console.log(" I am executed here - gt init ");
     return {
       items: [],
       filteredItems: [],
       totalCost: 0,
-      budget: 100,
-      remainingBudget: 100,
       // quantity: 1,
+      budget: 0,
+      remainingBudget: 0,
       mode: ModeToggle.EDITING
     };
   },
@@ -125,7 +126,8 @@ var App = Eventful.createClass({
 
     $.post(url.updateBudget, budget)
     .done(function(data) {
-      // this.getList();
+      this.setState({budget: data});
+      this.setState({remainingBudget: (parseInt(this.state.remainingBudget,10)+ parseInt(data,10)) });
       console.log("hi -- just updated the budget" + data);
     }.bind(this))
     .fail(function(xhr, status, err) {
@@ -148,10 +150,21 @@ var App = Eventful.createClass({
     $.post(url.login, userData)
     .done(function(data) {
       this.context.router.transitionTo('/');
+      this.getBudget();
       this.getList();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error logging in user:', status, err);
+    });
+  },
+
+  getBudget: function(archive){
+    $.get(url.getBudget)
+    .done(function(data) {
+      this.setState({budget: data});
+    }.bind(this))
+    .fail(function(xhr, status, err) {
+      console.error('Error in getting Budget in App:', status, err);
     });
   },
 

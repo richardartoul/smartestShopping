@@ -4,6 +4,7 @@ module.exports = {
   updateItem: '/api/item/update',
   deleteItem: '/api/item/delete',
   archiveItem: '/api/item/archive',
+  getBudget: '/api/budget',
   updateBudget: '/api/budget/update',
   register: '/auth/register',
   login: '/auth/login',
