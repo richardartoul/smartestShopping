@@ -1,6 +1,8 @@
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 var counter = 0;
+var fade = 0;
+fadeDirection = 0.01;
 var tweenedPath = [];
 
 context.beginPath();
@@ -8,6 +10,17 @@ context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
 
 //finds the next point at which the direction changes
 var findDirectionChange = function() {
+}
+
+var updateFade = function() {
+	if (fade >= 1) {
+		fadeDirection = -0.01;
+	}
+	else if (fade <= 0.01) {
+		fadeDirection = 0.01;
+	}
+	fade += fadeDirection;
+	console.log(fade);
 }
 
 var determineDirection = function(array, index, property) {
@@ -43,24 +56,6 @@ var preTween = function() {
 	console.log(testMap.path);
 	for (var i = 0; i < testMap.path.length; i++) {
 		for (var j = 0; j < 20; j++) {
-			// if (testMap.path[i].y === testMap.aisleLength-1) {
-			// 	for (var l = 0; l < 20; l++) {
-			// 		x = testMap.path[i].x;
-			// 		y = testMap.path[i].y;
-			// 		var tweenedCoordinates = {};
-			// 		tweenedCoordinates.x = x;
-			// 		tweenedCoordinates.y = y+0.05*yDirection*l;
-			// 		tweenedPath.push(tweenedCoordinates);
-			// 	}
-			// 	for (var l = 0; l < 20; l++) {
-			// 		x = testMap.path[i].x;
-			// 		y = testMap.path[i].y;
-			// 		var tweenedCoordinates = {};
-			// 		tweenedCoordinates.x = x;
-			// 		tweenedCoordinates.y = y;
-			// 		tweenedPath.push(tweenedCoordinates);
-			// 	}
-			// }
 			x = testMap.path[i].x;
 			y = testMap.path[i].y;
 			var tweenedCoordinates = {};
@@ -102,7 +97,6 @@ var drawPath = function() {
 		// context.lineWidth = 5;
 		// context.strokeStyle = 'blue';
 		// context.stroke();
-		counter++;
 		// if (counter < testMap.path.length) {
 		// 	setTimeout(animate, 100);
 		// }
@@ -122,12 +116,17 @@ var drawAisles = function() {
 } 
 
 var drawItems = function() {
+	context.save();
+	context.globalAlpha = fade
 	for (var i = 0; i < testMap.items.length; i++) {
 		context.beginPath();
 		context.arc(500 + 40*testMap.items[i].x, 500 - 40*testMap.items[i].y, 4, 0, 2 * Math.PI);
+		context.fillStyle = "rgb(250, 5, 5)";
+		context.strokeStyle = "rgb(250, 5, 5)";
+		context.fill();
 		context.stroke();
-		// context.fillRect(500 + 40*testMap.items[i].x, 500 - 40*testMap.items[i].y,10,10)
 	}
+	context.restore();
 }
 
 var render = function() {
@@ -135,6 +134,8 @@ var render = function() {
 	drawAisles();
 	drawItems();
 	drawPath();
+	updateFade();
+	counter++;
 }
 
 preTween();
