@@ -25,9 +25,7 @@ var StoreLayout = Eventful.createClass({
     testMap.constructGrid(5);
     testMap.placeItems();
     testMap.findAislesWithItems();
-    console.log("Aisles with items:", testMap.aislesWithItems);
     testMap.createPath();
-    console.log(testMap.grid);
     this.renderAisleMap(testMap);
   },
 
@@ -43,9 +41,7 @@ var StoreLayout = Eventful.createClass({
   },
 
   render: function() {
-    var canvasStyle = {
-      position: 'absolute'
-    }
+    console.log("props:", this.props.data.items);
     return (
       <div id="home">
         <NavToggle />
