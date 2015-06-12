@@ -146,7 +146,8 @@ var drawItems = function() {
 		// backgroundContext.clearRect(x-4,y-4,8, 8);
 		context.beginPath();
 		context.fillStyle = "rgb(250, 5, 5)";
-		context.strokeStyle = "rgb(250, 5, 5)";
+		context.strokeStyle = "black";
+		context.lineWidth = 0.5
 		// context.fill();
 		// context.stroke();
 		// context.arc(x, y, 4, 0, 2 * Math.PI);
@@ -154,12 +155,14 @@ var drawItems = function() {
 
 		// console.log(i%2);
 		if (i % 2 === 1 && testMap.items[i].x !== lastAisleWithItem) {
-			backgroundContext.clearRect(x-4,y-4,8, 8);
-			context.fillRect(x-4,y-4,8, 8);
+			backgroundContext.clearRect(x,y-4,4, 8);
+			context.fillRect(x,y-4,4, 8);
+			context.strokeRect(x,y-4,4, 8);
 		}
 		else {
-			backgroundContext.clearRect(x-44,y-4,8, 8);
-			context.fillRect(x-44,y-4,8, 8);
+			backgroundContext.clearRect(x-44,y-4,4, 8);
+			context.fillRect(x-44,y-4,4, 8);
+			context.strokeRect(x-44,y-4,4, 8);
 		}
 	}
 	context.restore();
