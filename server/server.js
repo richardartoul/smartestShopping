@@ -36,6 +36,7 @@ app.get('/api/list', listController.getList);
 
 app.use('/api/item/add', itemController.createNewItem);
 app.post('/api/item/add', listController.addItemToList);
+app.get('/api/item/autocomplete/:name', itemController.autocomplete);
 
 app.use('/api/item/update', itemController.createNewItem);
 app.post('/api/item/update', listController.updateItem);

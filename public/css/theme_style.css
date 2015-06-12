@@ -6464,3 +6464,15 @@ ul {
 .show {
   display: inline !important;
 }
+
+.autocomplete {
+  font-size: 20px;
+  font-style: italic;
+  margin:4px auto;
+
+}
+
+.autocomplete span {
+  display: block;
+  font-size: 12px;
+}
