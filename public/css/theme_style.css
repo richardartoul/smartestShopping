@@ -6464,3 +6464,7 @@ ul {
 .show {
   display: inline !important;
 }
+
+.aisle-canvas {
+  position: absolute
+}
