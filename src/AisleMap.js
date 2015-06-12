@@ -108,6 +108,18 @@ AisleMap.prototype.moveToEnd = function(direction) {
 	// console.log("in move to end, next aisle is:", this.nextAisle);
 	// console.log("in move to end, direction is:", this.direction);
 
+	//causes path to go slightly out of aisle into walkway
+	// var addWalkway = function() {
+	// 		var currentAisle = this.currentAisle;
+	// 		var currentPosition = this.currentPosition;
+	// 	if (this.direction === 1) {
+			// this.path.push({x: currentAisle, y: currentPosition+1});
+	// 	}
+	// 	else if (this.direction === -1) {
+	// 		this.path.push({x: currentAisle, y: -1});
+	// 	}
+	// }
+
 	//if last aisle, head back to entrance
 	if (this.currentAisle === this.nextAisle) {
 		this.direction = -1;
@@ -118,6 +130,11 @@ AisleMap.prototype.moveToEnd = function(direction) {
 			this.path.push({x: this.currentAisle, y:i});
 		}
 		this.currentPosition = this.aisleLength - 1;
+		//simulates walking out into the walkway
+		this.path.push({x: this.currentAisle, y: this.currentPosition+1});
+		this.path.push({x: this.currentAisle+1, y: this.currentPosition+1});
+
+		// addWalkway();
 	}
 	else if (this.direction === -1) {
 		this.currentPosition--;
@@ -126,6 +143,10 @@ AisleMap.prototype.moveToEnd = function(direction) {
 			console.log("in move to end, current position is:", i);
 		}
 		this.currentPosition = 0;
+		//simulates walking out into the walkway
+		this.path.push({x: this.currentAisle, y: this.currentPosition-1});
+		this.path.push({x: this.currentAisle+1, y: this.currentPosition-1});
+
 	}
 }
 

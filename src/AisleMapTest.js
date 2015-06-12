@@ -1,5 +1,7 @@
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
+var counter = 0;
+var tweenedPath = [];
 
 context.beginPath();
 context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
@@ -7,22 +9,103 @@ context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
 //finds the next point at which the direction changes
 var findDirectionChange = function() {
 }
+
+var determineDirection = function(array, index, property) {
+	if (!array[index+1] && property === 'y') {
+		if (index > testMap.aisleLength-1) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}
+	else if (!array[index+1]) {
+		return 0;
+	}
+	if (array[index+1][property] > array[index][property]) {
+		return 1;
+	}
+	else if (array[index+1][property] < array[index][property]) {
+		return -1;
+	}
+	else {
+		return 0;
+	}
+}
+
+var addWalkways = function() {
+	for (var i = 0; i < testMap.path.length; i++) {
+
+	}
+}
+
+var preTween = function() {
+	console.log(testMap.path);
+	for (var i = 0; i < testMap.path.length; i++) {
+		for (var j = 0; j < 20; j++) {
+			// if (testMap.path[i].y === testMap.aisleLength-1) {
+			// 	for (var l = 0; l < 20; l++) {
+			// 		x = testMap.path[i].x;
+			// 		y = testMap.path[i].y;
+			// 		var tweenedCoordinates = {};
+			// 		tweenedCoordinates.x = x;
+			// 		tweenedCoordinates.y = y+0.05*yDirection*l;
+			// 		tweenedPath.push(tweenedCoordinates);
+			// 	}
+			// 	for (var l = 0; l < 20; l++) {
+			// 		x = testMap.path[i].x;
+			// 		y = testMap.path[i].y;
+			// 		var tweenedCoordinates = {};
+			// 		tweenedCoordinates.x = x;
+			// 		tweenedCoordinates.y = y;
+			// 		tweenedPath.push(tweenedCoordinates);
+			// 	}
+			// }
+			x = testMap.path[i].x;
+			y = testMap.path[i].y;
+			var tweenedCoordinates = {};
+			var xDirection = determineDirection(testMap.path, i, 'x');
+			var yDirection = determineDirection(testMap.path, i, 'y');
+			tweenedCoordinates.x = x+0.05*xDirection*j;
+			tweenedCoordinates.y = y+0.05*yDirection*j;
+			tweenedPath.push(tweenedCoordinates);
+		}
+	}
+}
+
+var clearCanvas = function() {
+	context.clearRect(0,0,canvas.width, canvas.height);
+}
+
+var drawDiamond = function(ctx,x,y) {
+  	ctx.lineTo(x+15,y+10);
+    ctx.lineTo(x+7.5, y+20);
+    ctx.lineTo(x,y+10);
+	ctx.fillStyle = "rgb(102, 204, 0)"; //filled green for inner content
+	ctx.lineWidth = 1; // 1px width of outline
+	ctx.strokeStyle = "rgb(0, 50, 200)"; //filled red for outline
+	ctx.closePath(); 
+	//Fill the shape with colors that defined above
+	ctx.fill();
+	ctx.stroke();
+}
 	
 var drawPath = function() {
-	var counter = 0;
 
 	context.beginPath();
-	context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
+	var x = 500 + tweenedPath[counter].x * 40;
+	var y = 500 - tweenedPath[counter].y * 40
+	context.moveTo(x+7.5,y);
 	var animate = function() {
-	  	context.lineTo(testMap.path[counter].x*40+500, -testMap.path[counter].y*40+500);
-
-		context.lineWidth = 5;
-		context.strokeStyle = 'blue';
-		context.stroke();
+	  	// context.lineTo(testMap.path[counter].x*40+500, -testMap.path[counter].y*40+500);
+	  	drawDiamond(context,x,y);
+		// context.lineWidth = 5;
+		// context.strokeStyle = 'blue';
+		// context.stroke();
 		counter++;
-		if (counter < testMap.path.length) {
-			setTimeout(animate, 100);
-		}
+		// if (counter < testMap.path.length) {
+		// 	setTimeout(animate, 100);
+		// }
 	}
 	animate();	
 }	
@@ -47,6 +130,13 @@ var drawItems = function() {
 	}
 }
 
-drawAisles();
-drawItems();
-drawPath();
+var render = function() {
+	clearCanvas();
+	drawAisles();
+	drawItems();
+	drawPath();
+}
+
+preTween();
+console.log(tweenedPath);
+setInterval(render,16);
