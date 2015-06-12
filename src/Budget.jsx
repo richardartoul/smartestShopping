@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var Eventful = require('eventful-react');
 var NavToggle = require('./NavToggle');
 var List = require('./List');

@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var Eventful = require('eventful-react');
 var ModeToggle = require('./ModeToggle');
 var NavToggle = require('./NavToggle');
@@ -25,8 +25,7 @@ var Home = Eventful.createClass({
     return (
       <div id="home">
         <NavToggle />
-        <ModeToggle mode={this.props.data.mode} />
-        <List filteredItems={this.props.data.filteredItems} budget={this.props.data.budget} totalCost={this.props.data.totalCost} remainingBudget={this.props.data.remainingBudget} mode={this.props.data.mode} />
+        <List modeData={this.props.data.mode} filteredItems={this.props.data.filteredItems} budget={this.props.data.budget} totalCost={this.props.data.totalCost} remainingBudget={this.props.data.remainingBudget} mode={this.props.data.mode} />
       </div>
     );
   }

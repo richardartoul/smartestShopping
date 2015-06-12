@@ -1,6 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
 var Eventful = require('eventful-react');
 var ListItem = require('./ListItem');
+var ModeToggle = require('./ModeToggle');
 
 var List = Eventful.createClass({
   addItem: function(e) {
@@ -27,9 +28,10 @@ var List = Eventful.createClass({
         <div className="col-md-4">
           <div className="ibox float-e-margins" id="list-border">
             <div className="ibox-title">
-              <h5>Shopping List</h5>
+              <h5> Shopping List </h5>
             </div>
             <div className="ibox-content">
+            <ModeToggle mode={this.props.modeData} />
               <div className="row">
                 <div className="list">
                   <div className='new-item-input'>
