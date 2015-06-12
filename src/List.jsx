@@ -15,7 +15,7 @@ var List = Eventful.createClass({
   },
   renderListItem: function(itemData, id) {
     return (
-      <ListItem key={id} index={id} name={itemData.name} price={itemData.data.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
+      <ListItem key={id} index={id} name={itemData.name} price={itemData.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
     );
   },
   filterList: function(event) {

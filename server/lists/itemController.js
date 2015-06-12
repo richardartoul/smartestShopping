@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var models = require('../../db/database.js');
 var Item = mongoose.model('Item', models.item);
 
-
 var mode = function(array) {
   var count = {};
   var maxCount = 0;
@@ -24,21 +23,28 @@ module.exports = {
 
   createNewItem: function(req, res, next) {
     var name = req.body.name.toLowerCase();
-    var newItem = new Item({
-      name: name,
-      data: {
-        price: '30',
-        frequency: req.body.frequency,
-        coupons: ['none'],
-        expiration: new Date(2015,8,16)
-      }
-    });
-    console.log(db.products.findOne({'name':'Ginger'}));
+    // console.log('name', name);
+    var itemName = req.body.name;
+
+    // var newItem = new Item({
+    //   name: name,
+    //   data: {
+    //     price: price,
+    //     frequency: req.body.frequency,
+    //     coupons: ['none'],
+    //     expiration: new Date(2015,8,16)
+    //   }
+    // });
+    // console.log('running');
+    // console.log('price', price);
+    // Product.findOne({'name':'Cilantro'}, function(err, result){
+    //   console.log('result', result);
+    // });
 
     var findItem = Q.nbind(Item.findOne, Item);
     var createItem = Q.nbind(Item.create, Item);
 
-    findItem({name: name})
+    findItem({name: itemName})
     .then(function(match) {
       if (match) {
         req.smartShoppingData = match;

@@ -50,7 +50,7 @@ var App = Eventful.createClass({
     var args = Array.prototype.slice.apply(arguments);
     var allItems = this.state.items;
     var sum = allItems.map(function(item) {
-                return item.data.price;
+                return item.price;
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
