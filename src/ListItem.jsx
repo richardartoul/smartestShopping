@@ -1,6 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
 var Eventful = require('eventful-react');
 var ModeToggle = require('./ModeToggle');
+
 
 var ListItem = Eventful.createClass({
   getInitialState: function() {
