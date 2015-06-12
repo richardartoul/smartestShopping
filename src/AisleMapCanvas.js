@@ -119,12 +119,13 @@ var renderAisleMap = function(aisleMap){
 
 	var drawAisles = function() {
 		backgroundContext.beginPath();
-		backgroundContext.moveTo(xOffset + aisleMap.path[0].x * 40, yOffset + aisleMap.path[0].y * 40);
+		// backgroundContext.moveTo(xOffset + aisleMap.path[0].x * 40, yOffset + aisleMap.path[0].y * 40);
 
 		for (var i = 0; i < aisleMap.numAisles; i++) {
-			backgroundContext.moveTo(xOffset-20+40*i, yOffset+20);
-			backgroundContext.lineTo(xOffset-20+40*i, 125);
-			backgroundContext.lineWidth = 12;
+			// backgroundContext.moveTo(xOffset-20+40*i, yOffset+20);
+			backgroundContext.strokeRect(xOffset-20+40*i, 40,12, yOffset-125)
+			// backgroundContext.lineTo(xOffset-20+40*i, 125);
+			// backgroundContext.lineWidth = 12;
 			backgroundContext.strokeStyle = 'black';
 			backgroundContext.stroke();
 			backgroundContext.font ="18px serif";
@@ -136,7 +137,8 @@ var renderAisleMap = function(aisleMap){
 		context.save();
 		for (var i = 0; i < aisleMap.items.length; i++) {
 			// if (i % 2 === 0) {
-			context.globalAlpha = fade+Math.random()*0.001*i;
+			var localFade = fade + 0.01*i;
+			context.globalAlpha = localFade;
 			// }
 			// else {
 			// 	context.globalAlpha = fade-0.04*i;
@@ -145,7 +147,7 @@ var renderAisleMap = function(aisleMap){
 			var y = yOffset - 40*aisleMap.items[i].y;
 			// backgroundContext.clearRect(x-4,y-4,8, 8);
 			context.beginPath();
-			context.fillStyle = "rgb(250, 5, 5)";
+			context.fillStyle = "cyan";
 			context.strokeStyle = "black";
 			context.lineWidth = 0.5
 			// context.fill();
@@ -155,14 +157,14 @@ var renderAisleMap = function(aisleMap){
 
 			// console.log(i%2);
 			if (i % 2 === 1 && aisleMap.items[i].x !== lastAisleWithItem) {
-				backgroundContext.clearRect(x,y-4,4, 8);
-				context.fillRect(x,y-4,4, 8);
-				context.strokeRect(x,y-4,4, 8);
+				backgroundContext.clearRect(x-6,y-4,6, 15);
+				context.fillRect(x-6,y-4,6, 15);
+				context.strokeRect(x-6,y-4,6, 15);
 			}
 			else {
-				backgroundContext.clearRect(x-44,y-4,4, 8);
-				context.fillRect(x-44,y-4,4, 8);
-				context.strokeRect(x-44,y-4,4, 8);
+				backgroundContext.clearRect(x-40,y-4,6, 15);
+				context.fillRect(x-40,y-4,6, 15);
+				context.strokeRect(x-40,y-4,6, 15);
 			}
 		}
 		context.restore();
