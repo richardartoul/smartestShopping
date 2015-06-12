@@ -73,9 +73,8 @@ var List = Eventful.createClass({
               <div className="row">
                 <div className="list">
                   <div className='new-item-input'>
-                    <form name="new-item-form" onSubmit={this.addItem}>
- <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.handleInput} placeholder="Enter an item"/>
-                      <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
+                    <form name="new-item-form">
+                      <input id="tags" type="text" ref="newItemInput" name="newItemInput" onChange={this.handleInput} placeholder="Enter an item"/>
                     </form>
                 </div>
                 <div className="budgetDisplay">
