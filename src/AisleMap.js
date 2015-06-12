@@ -123,7 +123,6 @@ AisleMap.prototype.moveToEnd = function(direction) {
 		for (var i = 0; i < this.nextAisle - this.currentAisle; i++) {
 			this.path.push({x: this.currentAisle+i+1, y: this.currentPosition-1});
 		}
-
 	}
 }
 

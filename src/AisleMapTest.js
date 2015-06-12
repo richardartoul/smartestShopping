@@ -1,17 +1,30 @@
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
+var backgroundCanvas = document.getElementById('backgroundCanvas');
+var backgroundContext = backgroundCanvas.getContext('2d');
 var counter = 0;
+var lastAisleWithItem = -1;
 var fade = 0;
 var grow = 0;
+var xOffset = 200;
+var yOffset = 500;
 fadeDirection = 0.01;
 var growDirection = 0.1;
 var tweenedPath = [];
 
 context.beginPath();
-context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
+context.moveTo(xOffset + testMap.path[0].x * 40, yOffset + testMap.path[0].y * 40);
 
 //finds the next point at which the direction changes
 var findDirectionChange = function() {
+}
+
+var findLastAisleWithItem = function() {
+	for (var i = 0; i < testMap.aislesWithItems.length; i++) {
+		if (testMap.aislesWithItems[i]) {
+			lastAisleWithItem++;
+		}
+	}
 }
 
 var updateFade = function() {
@@ -89,7 +102,7 @@ var drawDiamond = function(ctx,x,y) {
   ctx.lineTo(x+7.5, y+20+grow);
   ctx.lineTo(x-grow,y+10);
 	ctx.fillStyle = "rgb(102, 204, 0)"; //filled green for inner content
-	ctx.lineWidth = 1; // 1px width of outline
+	ctx.lineWidth = 1+0.2*grow; // 1px width of outline
 	ctx.strokeStyle = "rgb(0, 50, 200)"; //filled red for outline
 	ctx.closePath(); 
 	//Fill the shape with colors that defined above
@@ -99,41 +112,64 @@ var drawDiamond = function(ctx,x,y) {
 	
 var drawPath = function() {
 	context.beginPath();
-	var x = 494 + tweenedPath[counter].x * 40;
-	var y = 500 - tweenedPath[counter].y * 40
+	var x = xOffset-6 + tweenedPath[counter].x * 40;
+	var y = yOffset - tweenedPath[counter].y * 40
 	drawDiamond(context,x,y);	
 }	
 
 var drawAisles = function() {
-	var backgroundCanvas = document.getElementById('backgroundCanvas');
-	var context = backgroundCanvas.getContext('2d');
-	context.beginPath();
-	context.moveTo(500 + testMap.path[0].x * 40, 500 + testMap.path[0].y * 40);
+	backgroundContext.beginPath();
+	backgroundContext.moveTo(xOffset + testMap.path[0].x * 40, yOffset + testMap.path[0].y * 40);
 
 	for (var i = 0; i < testMap.numAisles; i++) {
-		context.moveTo(480+40*i, 520);
-		context.lineTo(480+40*i, 120);
-		context.lineWidth = 2;
-		context.strokeStyle = 'black';
-		context.stroke();
+		backgroundContext.moveTo(xOffset-20+40*i, yOffset+20);
+		backgroundContext.lineTo(xOffset-20+40*i, 125);
+		backgroundContext.lineWidth = 12;
+		backgroundContext.strokeStyle = 'black';
+		backgroundContext.stroke();
+		backgroundContext.font ="18px serif";
+		backgroundContext.fillText((i+1).toString(), xOffset-6+40*i, yOffset+40);
 	}
 } 
 
 var drawItems = function() {
 	context.save();
-	context.globalAlpha = fade
 	for (var i = 0; i < testMap.items.length; i++) {
+		// if (i % 2 === 0) {
+		context.globalAlpha = fade+Math.random()*0.001*i;
+		// }
+		// else {
+		// 	context.globalAlpha = fade-0.04*i;
+		// }
+		var x = xOffset+20 + 40*testMap.items[i].x;
+		var y = yOffset - 40*testMap.items[i].y;
+		// backgroundContext.clearRect(x-4,y-4,8, 8);
 		context.beginPath();
-		context.arc(500 + 40*testMap.items[i].x, 500 - 40*testMap.items[i].y, 4, 0, 2 * Math.PI);
 		context.fillStyle = "rgb(250, 5, 5)";
 		context.strokeStyle = "rgb(250, 5, 5)";
-		context.fill();
-		context.stroke();
+		// context.fill();
+		// context.stroke();
+		// context.arc(x, y, 4, 0, 2 * Math.PI);
+		// var aisleSide = Math.floor(Math.random() * 2);
+
+		// console.log(i%2);
+		if (i % 2 === 1 && testMap.items[i].x !== lastAisleWithItem) {
+			backgroundContext.clearRect(x-4,y-4,8, 8);
+			context.fillRect(x-4,y-4,8, 8);
+		}
+		else {
+			backgroundContext.clearRect(x-44,y-4,8, 8);
+			context.fillRect(x-44,y-4,8, 8);
+		}
 	}
 	context.restore();
 }
 
 var render = function() {
+	//restart animation
+	if (counter === tweenedPath.length - 20) {
+		counter = 0;
+	}
 	clearCanvas();
 	drawItems();
 	drawPath();
@@ -145,5 +181,6 @@ var render = function() {
 
 drawAisles();
 preTween();
+findLastAisleWithItem();
 render();
-console.log(tweenedPath);
+console.log("last aisle is:", lastAisleWithItem);
