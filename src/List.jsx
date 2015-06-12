@@ -2,7 +2,6 @@ var React = require('react/addons');
 var Eventful = require('eventful-react');
 var ListItem = require('./ListItem');
 var ModeToggle = require('./ModeToggle');
-
 var url = require('./url');
 var AutocompleteItem = require('./AutocompleteItem');
 var List = Eventful.createClass({
@@ -22,7 +21,7 @@ var List = Eventful.createClass({
 
   renderListItem: function(itemData, id) {
     return (
-      <ListItem key={id} index={id} name={itemData.name} price={itemData.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
+      <ListItem key={id} index={id} name={itemData.name} category={itemData.category} price={itemData.price} mode={this.props.mode}/>
     );
   },
 

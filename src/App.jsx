@@ -20,7 +20,7 @@ var App = Eventful.createClass({
       items: [],
       filteredItems: [],
       totalCost: 0,
-      budget: 0,
+      budget: this.getBudget(),
       remainingBudget: 0,
       mode: ModeToggle.EDITING
     };
@@ -64,10 +64,11 @@ var App = Eventful.createClass({
     } 
   },
 
-  setRemainingBudget: function() {
-        this.setState({
-          remainingBudget: this.state.budget - this.state.totalCost
-        })
+  setRemainingBudget: function(cost) {
+    var itemCost = cost || this.state.totalCost;
+      this.setState({
+        remainingBudget: this.state.budget - itemCost
+      })
   },
 
   addItem: function(item) {
@@ -203,6 +204,10 @@ var App = Eventful.createClass({
       } else {
         this.deleteItem(data);
       }
+    });
+    this.on('set-quantity', function(data) {
+      console.log('set-qty data', data.index);
+      this.setRemainingBudget(data.index);
     });
     this.on('update-budget', function(data){
       this.updateBudget(data);
