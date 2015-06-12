@@ -20,7 +20,6 @@ var App = Eventful.createClass({
       items: [],
       filteredItems: [],
       totalCost: 0,
-      // quantity: 1,
       budget: 0,
       remainingBudget: 0,
       mode: ModeToggle.EDITING

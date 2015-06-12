@@ -7,7 +7,8 @@ var ListItem = Eventful.createClass({
   getInitialState: function() {
     return {
       value: this.props.name,
-      editable: false
+      editable: false,
+      quantity: 1
     };
   },
   componentWillReceiveProps: function(newProps) {
@@ -18,20 +19,20 @@ var ListItem = Eventful.createClass({
       React.findDOMNode(this.refs.editInput).focus();
     });
   },
-  // updateQuantity: function(e) {
-  //   this.setState({quantity: e.target.value})
-  // },
   updateValue: function(e) {
     this.setState({ value: e.target.value });
   },
-  updateItem: function(e) {
+  updateQuantity: function(e) {
     e.preventDefault();
-    var name = e.target.itemName.value;
-    this.emit('update-item',{
-      index: this.props.index,
-      name: name
-    });
+    var quantity = e.target.value;
+    this.setState({quantity: quantity});
+  },
+  setQuantity: function(e) {
     this.setState({editable: false});
+    this.emit('set-quantity', {index: (this.props.price * this.state.quantity)});
+  },
+  updatePrice: function(e) {
+    this.emit('update-price');
   },
   removeItem: function() {
     this.emit('remove-item', { index: this.props.index });
@@ -40,16 +41,17 @@ var ListItem = Eventful.createClass({
     var cssClasses = {
       staticItem: 'static-item ',
       editableItem: 'editable-item ',
+      editableQuantity: 'editable-quantity ',
       editingIcon: 'fa fa-trash fa-lg remove-button editing-icon ',
       shoppingIcon: 'fa fa-check fa-lg remove-button shopping-icon '
     };
 
     if (this.state.editable) {
       cssClasses.staticItem += 'hide';
-      cssClasses.editableItem += 'show';
+      cssClasses.editableQuantity += 'show';
     } else {
       cssClasses.staticItem += 'show';
-      cssClasses.editableItem += 'hide';
+      cssClasses.editableQuantity += 'hide';
     }
 
     if (this.props.mode === ModeToggle.SHOPPING) {
@@ -59,20 +61,19 @@ var ListItem = Eventful.createClass({
       cssClasses.editingIcon += 'show';
       cssClasses.shoppingIcon += 'hide';
     }
-
     return (
       <li className="list-item animated fadeInDown">
         <div className={cssClasses.staticItem}>
           <i className={cssClasses.shoppingIcon} onClick={this.removeItem}></i>
           <i className ={cssClasses.editingIcon} onClick={this.removeItem}></i>
-          <div className="item-label" onClick={this.switchToEditable}>{this.props.name}</div>
-          <div className="food-cat">{this.props.foodCategory}</div>
-          <div className="food-price">${this.props.price}</div>
-          qty:<input className="quantity" type="text" value={this.state.quantity} placeholder="qty" name="quantity"/>
+          <div className="item-label">{this.props.name}</div>
+          <div className="food-cat">{this.props.category}</div>
+          <div className="food-price">${parseFloat(this.props.price * this.state.quantity).toFixed(2)}</div>
+          <div className="quantity" onClick={this.switchToEditable}>qty: {this.state.quantity}</div>
         </div>
-        <div className={cssClasses.editableItem}>
-          <form name={"item-form-" + this.props.index} onSubmit={this.updateItem}>
-            <input type="text" ref="editInput" name="itemName" value={this.state.value} onChange={this.updateValue} />
+        <div className={cssClasses.editableQuantity}>
+          <form name={"item-form-" + this.props.index} onSubmit={this.setQuantity}>
+            <input type="text" ref="editInput" value={this.state.quantity} onChange={this.updateQuantity} />
           </form>
         </div>
       </li>
