@@ -5,8 +5,8 @@ module.exports = {
   item : new Schema({
     name: String,
     timestamp: { type: Date, default: Date.now },
+    price: Number,
     data: {
-      price: Number,
       frequency: Number,
       coupons: [String],
       food_category: String,
