@@ -143,7 +143,7 @@ var renderAisleMap = function(aisleMap){
 			}
 		}
 		context.lineWidth = 2;
-		context.strokeStyle = 'lightBlue';
+		context.strokeStyle = 'blue';
 		context.stroke();
 	}		
 
