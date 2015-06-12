@@ -1,9 +1,6 @@
 var React = require('react');
 var Eventful = require('eventful-react');
 var ListItem = require('./ListItem');
-var Autocomplete = require('../lib/main');
-var Combobox = Autocomplete.Combobox;
-var ComboboxOption = Autocomplete.Option;
 
 var List = Eventful.createClass({
   addItem: function(e) {

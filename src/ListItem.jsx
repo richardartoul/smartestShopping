@@ -17,6 +17,9 @@ var ListItem = Eventful.createClass({
       React.findDOMNode(this.refs.editInput).focus();
     });
   },
+  // updateQuantity: function(e) {
+  //   this.setState({quantity: e.target.value})
+  // },
   updateValue: function(e) {
     this.setState({ value: e.target.value });
   },
@@ -64,6 +67,7 @@ var ListItem = Eventful.createClass({
           <div className="item-label" onClick={this.switchToEditable}>{this.props.name}</div>
           <div className="food-cat">{this.props.foodCategory}</div>
           <div className="food-price">${this.props.price}</div>
+          qty:<input className="quantity" type="text" value={this.state.quantity} placeholder="qty" name="quantity"/>
         </div>
         <div className={cssClasses.editableItem}>
           <form name={"item-form-" + this.props.index} onSubmit={this.updateItem}>

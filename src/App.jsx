@@ -21,6 +21,7 @@ var App = Eventful.createClass({
       totalCost: 0,
       budget: 100,
       remainingBudget: 100,
+      // quantity: 1,
       mode: ModeToggle.EDITING
     };
   },
