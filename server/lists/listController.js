@@ -77,8 +77,8 @@ module.exports = {
     User.findOneAndUpdate(
       {username: username}, 
       {$push: {'list': req.smartShoppingData._id}}, 
-      {upsert: true}, 
-      function(err, user) {
+      {upsert: true})
+      .populate('list').exec(function (err, user) {
         if (err) {
           console.error(err);
           res.status(500).send({ error: 'Server Error'});

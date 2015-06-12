@@ -56,7 +56,7 @@ var App = Eventful.createClass({
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
-        return parseFloat(total + num).toFixed(2)
+        return total + num
       }, 0)
     }) 
     //if the item is not being archived (args are only sent from archiveItem)
@@ -183,18 +183,20 @@ var App = Eventful.createClass({
     this.on('update-item', function(data) {
       this.updateItem(data)
     });
-    this.on('add-item', function(data) {
-      // if this.state.remainingBudget - thisItem.price > 0
-      if(this.state.remainingBudget - 30 >= 0){
-        this.addItem(data);
-      } else {
-        var exceedBudgetOk = confirm('This item will exceed your budget, are you sure you want to add it?');
-        if(exceedBudgetOk){
-          this.addItem(data);
-        } else {
-          this.getList();
-        }
-      }
+    this.on('refresh-list', function(data) {
+      this.getList();
+      // console.log('ADD ITEM');
+      // // if this.state.remainingBudget - thisItem.price > 0
+      // if(this.state.remainingBudget - 30 >= 0){
+      //   this.addItem(data);
+      // } else {
+      //   var exceedBudgetOk = confirm('This item will exceed your budget, are you sure you want to add it?');
+      //   if(exceedBudgetOk){
+      //     this.addItem(data);
+      //   } else {
+      //     this.getList();
+      //   }
+      // }
     });
     this.on('remove-item', function(data) {
       if (this.state.mode === ModeToggle.SHOPPING) {

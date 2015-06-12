@@ -3,22 +3,61 @@ var Eventful = require('eventful-react');
 var ListItem = require('./ListItem');
 var ModeToggle = require('./ModeToggle');
 
+var url = require('./url');
+var AutocompleteItem = require('./AutocompleteItem');
 var List = Eventful.createClass({
-  addItem: function(e) {
-    e.preventDefault();
-    var newItemName = e.target.newItemInput.value;
-    e.target.newItemInput.value = '';
-
-    this.emit('add-item', { name: newItemName });
+  getInitialState: function() {
+    return {
+      autocomplete_items: []
+    }
   },
+
+  componentDidMount: function() {
+    // eventful event listeners
+    this.on('emptyAutocomplete', function() {
+      this.setState({autocomplete_items: []});
+    });
+
+  },
+
   renderListItem: function(itemData, id) {
     return (
       <ListItem key={id} index={id} name={itemData.name} price={itemData.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
     );
   },
-  filterList: function(event) {
+
+  renderAutocompleteItem: function(itemData, id) {
+    return (
+      <AutocompleteItem key={id} index={id} name={itemData.name} item={itemData} price={itemData.price} mode={this.props.mode} foodCategory={itemData.data.food_category}/>
+    );
+  },
+
+  handleInput: function(){
     event.preventDefault();
-    this.emit('filter-list', event.target.value.toLowerCase());
+    var value = event.target.value;
+    if (this.props.mode === ModeToggle.SHOPPING) {
+      this.filterList(value);
+    }else {
+      this.autocomplete(value);
+    }
+  },
+
+  filterList: function(value) {
+    this.emit('filter-list', value);
+  },
+
+  autocomplete: function(value) {
+    if (value.length >= 3 ){
+      $.get(url.autocomplete + '/' + value)
+      .done(function(data) {
+        this.setState({autocomplete_items: data});
+      }.bind(this))
+      .fail(function(xhr, status, err) {
+        console.error('Error getting item list:', status, err);
+      }.bind(this));
+    }else {
+      this.setState({autocomplete_items: []});
+    }
   },
 
   render: function() {
@@ -36,7 +75,7 @@ var List = Eventful.createClass({
                 <div className="list">
                   <div className='new-item-input'>
                     <form name="new-item-form" onSubmit={this.addItem}>
- <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.filterList} placeholder="Enter an item"/>
+ <input id="tags" className='new-item-input' type="text" ref="newItemInput" name="newItemInput" onChange={this.handleInput} placeholder="Enter an item"/>
                       <input className='btn btn-sm btn-primary add-item-button' type="submit" value="Add Item"/>
                     </form>
                 </div>
@@ -44,6 +83,9 @@ var List = Eventful.createClass({
                   <h2 className="setBudget">Budget: ${this.props.budget}</h2>
                   <h2 className="remainingBudget">Balance: ${this.props.remainingBudget}</h2>
                 </div>
+                <ul>
+                  {this.state.autocomplete_items.map(this.renderAutocompleteItem)}
+                </ul>
                 <ul>
                   {this.props.filteredItems.map(this.renderListItem)}
                 </ul>
