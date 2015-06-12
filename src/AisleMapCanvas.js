@@ -78,7 +78,6 @@ var renderAisleMap = function(aisleMap){
 	}
 
 	var preTween = function() {
-		console.log(aisleMap.path);
 		for (var i = 0; i < aisleMap.path.length; i++) {
 			for (var j = 0; j < 20; j++) {
 				x = aisleMap.path[i].x;
@@ -187,7 +186,6 @@ var renderAisleMap = function(aisleMap){
 	preTween();
 	findLastAisleWithItem();
 	render();
-	console.log("last aisle is:", lastAisleWithItem);
 }
 
 module.exports = renderAisleMap;

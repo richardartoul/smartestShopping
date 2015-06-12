@@ -123,7 +123,6 @@ AisleMap.prototype.moveToEnd = function(direction) {
 		this.currentPosition--;
 		for (var i = this.currentPosition; i >= 0; i--) {
 			this.path.push({x: this.currentAisle, y:i});
-			console.log("in move to end, current position is:", i);
 		}
 		this.currentPosition = 0;
 	}
@@ -132,7 +131,6 @@ AisleMap.prototype.moveToEnd = function(direction) {
 AisleMap.prototype.chooseNextAisle = function() {
 	for (var i = this.currentAisle+1; i < this.aislesWithItems.length; i++) {
 		if (this.aislesWithItems[i]) {
-			console.log("selected next aisle: ", i);
 			this.nextAisle = i;
 			return i;
 		}
@@ -149,7 +147,6 @@ AisleMap.prototype.chooseDirection = function(direction) {
 	var side;
 	var hasItem = false;
 	//figure out what side the current position is on
-	console.log("before check, currentPosition is:", this.currentPosition);
 	if (this.currentPosition < (this.aisleLength-1)/2) {
 		side = -1;
 	}
@@ -160,8 +157,6 @@ AisleMap.prototype.chooseDirection = function(direction) {
 		side = this.direction;
 	}
 
-	console.log("current position is:", this.currentPosition);
-	console.log("side is:", side);
 	//check if there are any items on that side
 	if (side === 1) {
 		for (var i = this.aisleLength-1; i > (this.aisleLength-1)/2; i--) {
@@ -194,7 +189,6 @@ AisleMap.prototype.chooseDirection = function(direction) {
 			return;
 		}
 	}
-	console.log("hasItem is:", hasItem);
 	//if there is an item on the same side, head in that direction, otherwise continue in same direction
 	if (hasItem) {
 		this.direction = side;
@@ -215,7 +209,6 @@ AisleMap.prototype.createPath = function() {
 		else {
 			this.direction = -1;
 		}
-		console.log("main loop beforer start direction is", this.direction);
 		//moves down the aisle until there are no more items
 		while(this.checkAisle(this.direction)) {
 			this.moveToItem(this.direction);
@@ -224,31 +217,21 @@ AisleMap.prototype.createPath = function() {
 		this.path.push({x: this.currentAisle, y:this.currentPosition});
 		//figure out which aisle to move to next
 		this.chooseNextAisle();
-		console.log("next aisle:", this.nextAisle);
 		//determine new direction
 		this.chooseDirection();
-		console.log("new direction:", this.direction);
 		//move to end of current aisle in selected direction
 		this.moveToEnd(this.direction);
 		//move to next aisle
-		console.log("moved to aisle:", this.nextAisle);
 		this.currentAisle = this.nextAisle;
 		//rise and repeat until complete
 	}
-	console.log(this.path);
-	console.log("current aisle is:", this.currentAisle);
-	console.log("next aisle is:", this.nextAisle);
-	console.log("current position is:", this.currentPosition);
-	console.log("direction at end is:", this.direction);
 }
 
 module.exports = AisleMap;
 
 //tests
-var testMap = new AisleMap();
-testMap.constructGrid(5);
-testMap.placeItems();
-testMap.findAislesWithItems();
-console.log("Aisles with items:", testMap.aislesWithItems);
-testMap.createPath();
-console.log(testMap.grid);
+// var testMap = new AisleMap();
+// testMap.constructGrid(5);
+// testMap.placeItems();
+// testMap.findAislesWithItems();
+// testMap.createPath();
