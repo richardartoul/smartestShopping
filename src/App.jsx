@@ -21,6 +21,7 @@ var App = Eventful.createClass({
       totalCost: 0,
       budget: 100,
       remainingBudget: 100,
+      // quantity: 1,
       mode: ModeToggle.EDITING
     };
   },
@@ -50,7 +51,7 @@ var App = Eventful.createClass({
     var args = Array.prototype.slice.apply(arguments);
     var allItems = this.state.items;
     var sum = allItems.map(function(item) {
-                return item.data.price;
+                return item.price;
               });
     this.setState({
       totalCost: sum.reduce(function(total, num){
@@ -64,11 +65,9 @@ var App = Eventful.createClass({
   },
 
   setRemainingBudget: function() {
-      // if (this.state.budget - this.state.totalCost > 0){
         this.setState({
           remainingBudget: this.state.budget - this.state.totalCost
         })
-      // }
   },
 
   addItem: function(item) {
@@ -78,7 +77,6 @@ var App = Eventful.createClass({
     $.post(url.addItem, item)
     .done(function(data) {
       this.getList();
-      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error adding new item to list:', status, err);
@@ -104,7 +102,6 @@ var App = Eventful.createClass({
     })
     .done(function(data) {
       this.getList();
-      // this.addPrices();
     }.bind(this))
     .fail(function(xhr, status, err) {
       console.error('Error deleting item from list:', status, err);

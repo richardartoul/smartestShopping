@@ -20,5 +20,5 @@ module.exports = {
     balance: Number,
     list: [{ type: Schema.Types.ObjectId, ref: 'Item'}],
     past_items: [{ type: Schema.Types.ObjectId, ref: 'Item'}]
-  })
+  }),
 };
