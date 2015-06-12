@@ -14,7 +14,7 @@ var StoreLayout = Eventful.createClass({
   getInitialState: function() {
     return {
       items: [],
-      aisleMap: new AisleMap()
+      aisleMap: new AisleMap({items: this.props.data.items})
     };
   },
 
@@ -27,6 +27,9 @@ var StoreLayout = Eventful.createClass({
     testMap.findAislesWithItems();
     testMap.createPath();
     this.renderAisleMap(testMap);
+    console.log("testmap items:", testMap.items);
+    console.log("testmap aisleWithItems:", testMap.aislesWithItems);
+    console.log("testmap path", testMap.path);
   },
 
   statics: {

@@ -2,22 +2,25 @@ var AisleMap = function(options) {
   var options = options || {};
   var numAisles = options.numAisles || 10;
 	this.numAisles = numAisles;
+	var items = []
+
   //test data
-	this.items = [
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-		{x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))},
-	];
+	if (!options.items) {
+		for (var i = 0; i < 15; i++) {
+			items.push({x: Math.floor((Math.random()*numAisles)), y: Math.floor((Math.random()*10))})
+		}
+	}
+	//actual data
+	else {
+		for (var i = 0; i < options.items.length; i++) {
+			if (options.items[i].aisle) {
+				items.push(
+					{x: options.items[i].aisle-1, y: Math.floor((Math.random()*10))}
+				);
+			}
+		}
+	}
+	this.items = items;
 	this.grid = [];
 	this.path = [];
 	this.aislesWithItems = [];
@@ -50,7 +53,7 @@ AisleMap.prototype.findAislesWithItems = function() {
 		.join('0').split('').map(function(e) {return parseInt(e, 10);});
 
 	for (var i = 0; i < this.items.length; i++) {
-		if (!aislesWithItems[this.items[i].x]) {
+		if (this.items[i].x) {
 			aislesWithItems[this.items[i].x] = 1;
 		}
 	}
@@ -221,6 +224,14 @@ AisleMap.prototype.createPath = function() {
 		this.chooseDirection();
 		//move to end of current aisle in selected direction
 		this.moveToEnd(this.direction);
+		//switch to next aisle
+		for (var i = 0; i < (this.nextAisle - this.currentAisle); i++) {
+			this.path.push({x: this.currentAisle+i, y: this.currentPosition});
+		}
+		console.log("loop number ",i, "current aisle is: ", this.currentAisle, " and nextAisle is: ", this.nextAisle);
+		if (this.currentAisle === this.nextAisle) {
+			break;
+		}
 		//move to next aisle
 		this.currentAisle = this.nextAisle;
 		//rise and repeat until complete
